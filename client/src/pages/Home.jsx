@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-
-const Home = () => {
-  return <div>Home</div>;
-=======
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -50,7 +44,6 @@ const Home = () => {
       </div>
     </>
   );
->>>>>>> cb5756c (feat: the initial get all ui+backend and post)
 };
 
 export default Home;
