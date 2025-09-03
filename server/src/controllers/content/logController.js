@@ -21,7 +21,7 @@ export const postLogHandler = async (req, res) => {
   try {
     const result = await pool.query(
       "INSERT INTO logs (day_number, raw_content) VALUES ($1, $2)",
-      [newLog.day_number, newLog.raw_content]
+      [newLog.dayNumber, newLog.log]
     );
     // console.log("User inserted with ID: ", res.rows[0].id);
     res.send(result);

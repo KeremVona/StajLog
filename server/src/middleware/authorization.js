@@ -6,6 +6,8 @@ dotenv.config();
 export default function (req, res, next) {
   const authHeader = req.headers.authorization;
 
+  const token = authHeader?.split(" ")[1];
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).send("Unauthorized: No token provided");
   }

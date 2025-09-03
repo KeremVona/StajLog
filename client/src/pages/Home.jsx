@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import LogForm from "../components/content/LogForm";
 
 const Home = () => {
   const [logs, setLogs] = useState([]);
+  const [formData, setFormData] = useState({ dayNumber: "", rawContent: "" });
+  const [hide, setHide] = useState(false);
 
   const handleGetAll = async () => {
     const token = localStorage.getItem("token");
@@ -16,7 +19,27 @@ const Home = () => {
 
       setLogs(result.data);
     } catch (err) {
-      console.error("Error getting logs", err.message);
+      console.error("Error getting logs ", err.message);
+    }
+  };
+
+  const handlePost = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const result = await axios.post(
+        "http://localhost:5000/api/content",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.error("Error posting log ", err.message);
     }
   };
   return (
@@ -24,6 +47,12 @@ const Home = () => {
       <button onClick={handleGetAll} className="block p-2 bg-gray-400">
         Get all
       </button>
+
+      <button onClick={() => setHide(!hide)} className="block p-2 bg-gray-400">
+        Enter log
+      </button>
+
+      {hide && <LogForm />}
       <div className="space-y-4">
         {logs.map((log) => (
           <div
