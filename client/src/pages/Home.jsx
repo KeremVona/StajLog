@@ -1,77 +1,101 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import LogForm from "../components/content/LogForm";
+import Navbar from "../components/ui/Navbar";
+import AddLogForm from "../components/content/AddLogForm";
+import LogEditorModal from "../components/content/LogEditorModal";
+import LogList from "../components/content/LogList";
+import { useNavigate } from "react-router-dom";
+
+const API_BASE_URL = "http://localhost:5000/api";
 
 const Home = () => {
   const [logs, setLogs] = useState([]);
   const [formData, setFormData] = useState({ dayNumber: "", rawContent: "" });
   const [hide, setHide] = useState(false);
+  const [editingLog, setEditingLog] = useState(null);
+  const navigate = useNavigate();
 
-  const handleGetAll = async () => {
+  // Authentication Check
+  useEffect(() => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      fetchLogs();
+    }
+  }, [navigate]);
 
+  // Fetch Logs
+  const fetchLogs = async () => {
+    const token = localStorage.getItem("token");
     try {
-      const result = await axios.get("http://localhost:5000/api/content", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.get(`${API_BASE_URL}/content`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      setLogs(result.data);
-    } catch (err) {
-      console.error("Error getting logs ", err.message);
+      setLogs(response.data);
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+      if (error.response?.status === 401) {
+        navigate("/login");
+      }
     }
   };
 
-  const handlePost = async (e) => {
-    e.preventDefault();
-
+  // Add Log
+  const handleAddLog = async (logData) => {
     const token = localStorage.getItem("token");
-
     try {
-      const result = await axios.post(
-        "http://localhost:5000/api/content",
-        formData,
+      await axios.post(`${API_BASE_URL}/content`, logData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchLogs(); // Refresh the log list
+    } catch (error) {
+      console.error("Error adding log:", error);
+    }
+  };
+
+  // Edit Log
+  const handleEditLog = (log) => {
+    setEditingLog(log);
+  };
+
+  const handleUpdateLog = async (updatedLog) => {
+    const token = localStorage.getItem("token");
+    console.log("-", updatedLog.raw_content);
+    try {
+      await axios.put(
+        `${API_BASE_URL}/content/${updatedLog.id}`,
+        { raw_content: updatedLog.raw_content },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-    } catch (err) {
-      console.error("Error posting log ", err.message);
+      setEditingLog(null); // Close the modal
+      fetchLogs(); // Refresh the list
+    } catch (error) {
+      console.error("Error updating log:", error);
     }
   };
   return (
-    <>
-      <button onClick={handleGetAll} className="block p-2 bg-gray-400">
-        Get all
-      </button>
-
-      <button onClick={() => setHide(!hide)} className="block p-2 bg-gray-400">
-        Enter log
-      </button>
-
-      {hide && <LogForm />}
-      <div className="space-y-4">
-        {logs.map((log) => (
-          <div
-            key={log.id}
-            className="bg-white shadow-md rounded-2xl p-4 border border-gray-200"
-          >
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">
-              Day {log.day_number}
-            </h2>
-            <textarea
-              value={log.raw_content}
-              readOnly
-              className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-              rows={4}
-            />
-          </div>
-        ))}
+    <div className="min-h-screen bg-gray-100">
+      <Navbar userName="John Doe" />
+      <div className="container mx-auto p-4">
+        {/* Add New Log Section */}
+        <AddLogForm onAddLog={handleAddLog} logs={logs} />
+        <h2 className="text-2xl font-bold my-6">Your Internship Logs</h2>
+        {/* Log List / Table */}
+        <LogList logs={logs} onEdit={handleEditLog} />
       </div>
-    </>
+      {/* Log Detail / Editor Modal */}
+      {editingLog && (
+        <LogEditorModal
+          log={editingLog}
+          onClose={() => setEditingLog(null)}
+          onUpdate={handleUpdateLog}
+        />
+      )}
+    </div>
   );
 };
 

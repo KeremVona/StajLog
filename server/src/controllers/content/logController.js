@@ -30,3 +30,38 @@ export const postLogHandler = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+export const updateLogHandler = async (req, res) => {
+  const { id } = req.params;
+  console.log("req.user ", req.user);
+  const userId = req.user.id;
+  console.log("id ", id);
+  console.log("userId, ", userId);
+  const { raw_content } = req.body;
+  console.log("raw_content ", raw_content);
+  console.log("-----------------");
+
+  try {
+    const log = await pool.query(
+      "SELECT * FROM logs WHERE id = $1 AND user_id = $2",
+      [id, userId]
+    );
+
+    /*if (!log.rows.length) {
+      return res.status(404).json({ message: "Log not found." });
+    }*/
+
+    const updatedLog = await pool.query(
+      "UPDATE logs SET raw_content = $1, updated_at = NOW() WHERE id = $2 RETURNING *",
+      [raw_content || log.rows[0].raw_content, id]
+    );
+
+    console.log("updatedLog ", updatedLog);
+
+    console.log(`Log ${id} updated for user ${userId}`);
+    res.status(200).json(updatedLog.rows[0]);
+  } catch (err) {
+    console.log("Server error", err.message);
+    res.status(500);
+  }
+};
