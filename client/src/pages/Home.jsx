@@ -49,10 +49,18 @@ const Home = () => {
   // Add Log
   const handleAddLog = async (logData) => {
     const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+    const id = decoded.user.id;
+    console.log("--id-- ", id);
+    console.log("--logData-- ", logData);
     try {
-      await axios.post(`${API_BASE_URL}/content`, logData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(
+        `${API_BASE_URL}/content`,
+        { ...logData, user_id: id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       fetchLogs(); // Refresh the log list
     } catch (error) {
       console.error("Error adding log:", error);
@@ -81,6 +89,20 @@ const Home = () => {
       console.error("Error updating log:", error);
     }
   };
+
+  const handleDeleteLog = async (logId) => {
+    const token = localStorage.getItem("token");
+    console.log("-logId- ", logId);
+    try {
+      await axios.delete(`${API_BASE_URL}/content/${logId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(`Log ${logId} deleted.`);
+      fetchLogs();
+    } catch (error) {
+      console.error("Error deleting log:", error);
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar userName={username} />
@@ -89,7 +111,11 @@ const Home = () => {
         <AddLogForm onAddLog={handleAddLog} logs={logs} />
         <h2 className="text-2xl font-bold my-6">Your Internship Logs</h2>
         {/* Log List / Table */}
-        <LogList logs={logs} onEdit={handleEditLog} />
+        <LogList
+          logs={logs}
+          onEdit={handleEditLog}
+          onDelete={handleDeleteLog}
+        />
       </div>
       {/* Log Detail / Editor Modal */}
       {editingLog && (

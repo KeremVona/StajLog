@@ -15,13 +15,12 @@ export const getAllLogsHandler = async (req, res) => {
 
 export const postLogHandler = async (req, res) => {
   // newLog.day_number, newLog.raw_content
-  const newLog = req.body;
-  console.log(newLog);
+  const { day, raw_content, user_id } = req.body;
 
   try {
     const result = await pool.query(
-      "INSERT INTO logs (day_number, raw_content) VALUES ($1, $2)",
-      [newLog.dayNumber, newLog.log]
+      "INSERT INTO logs (day_number, raw_content, user_id) VALUES ($1, $2, $3)",
+      [day, raw_content, user_id]
     );
     // console.log("User inserted with ID: ", res.rows[0].id);
     res.send(result);
@@ -63,5 +62,33 @@ export const updateLogHandler = async (req, res) => {
   } catch (err) {
     console.log("Server error", err.message);
     res.status(500);
+  }
+};
+
+export const deleteLogHandler = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  console.log("-----");
+  console.log("id ", id);
+  console.log("userId", userId);
+  console.log("-----");
+
+  try {
+    const result = await pool.query(
+      "DELETE FROM logs WHERE id = $1 AND user_id = $2 RETURNING *",
+      [id, userId]
+    );
+
+    if (result.rows.length === 0) {
+      // No rows deleted → log not found for this user
+      return res.status(404).json({ message: "Log not found." });
+    }
+
+    console.log(`Log ${id} deleted for user ${userId}`);
+    res.status(204).send(); // No content
+  } catch (err) {
+    console.error("Error deleting log:", err.message);
+    res.status(500).json({ message: "Server error" });
   }
 };

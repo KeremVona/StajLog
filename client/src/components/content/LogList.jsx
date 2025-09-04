@@ -1,7 +1,7 @@
 import React from "react";
 import { truncateText } from "../../utils/helpers.js";
 
-function LogList({ logs, onEdit }) {
+function LogList({ logs, onEdit, onDelete }) {
   return (
     <div className="overflow-x-auto bg-white rounded-lg shadow-md">
       <table className="min-w-full divide-y divide-gray-200">
@@ -47,6 +47,12 @@ function LogList({ logs, onEdit }) {
                   className="text-indigo-600 hover:text-indigo-900"
                 >
                   Edit/View
+                </button>
+                <button
+                  onClick={() => onDelete(log.id)}
+                  className="ml-2 text-red-600 hover:text-red-900"
+                >
+                  Delete
                 </button>
               </td>
             </tr>

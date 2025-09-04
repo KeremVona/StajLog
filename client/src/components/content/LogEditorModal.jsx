@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3000/api";
+const API_BASE_URL = "http://localhost:5000/api";
 
 function LogEditorModal({ log, onClose, onUpdate }) {
   const [rawContent, setRawContent] = useState(log.raw_content);
