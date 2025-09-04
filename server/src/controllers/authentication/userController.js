@@ -24,7 +24,10 @@ export const registerHandler = async (req, res) => {
       [username, email, bcryptPassword]
     );
 
-    const jwtToken = jwtGenerator(newUser.rows[0].user_id);
+    const jwtToken = jwtGenerator(
+      newUser.rows[0].user_id,
+      newUser.rows[0].user_name
+    );
     console.log("token", jwtToken);
 
     return res.json({ jwtToken });
@@ -54,7 +57,7 @@ export const loginHandler = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json("Invalid Credential");
     }
-    const jwtToken = jwtGenerator(user.rows[0].user_id);
+    const jwtToken = jwtGenerator(user.rows[0].user_id, user.rows[0].user_name);
     return res.json({ jwtToken });
   } catch (err) {
     console.error(err.message);

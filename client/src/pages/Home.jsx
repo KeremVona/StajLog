@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import LogForm from "../components/content/LogForm";
 import Navbar from "../components/ui/Navbar";
 import AddLogForm from "../components/content/AddLogForm";
@@ -14,6 +15,7 @@ const Home = () => {
   const [formData, setFormData] = useState({ dayNumber: "", rawContent: "" });
   const [hide, setHide] = useState(false);
   const [editingLog, setEditingLog] = useState(null);
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   // Authentication Check
@@ -23,6 +25,8 @@ const Home = () => {
       navigate("/login");
     } else {
       fetchLogs();
+      const decoded = jwtDecode(token);
+      setUsername(decoded.user.username);
     }
   }, [navigate]);
 
@@ -79,7 +83,7 @@ const Home = () => {
   };
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar userName="John Doe" />
+      <Navbar userName={username} />
       <div className="container mx-auto p-4">
         {/* Add New Log Section */}
         <AddLogForm onAddLog={handleAddLog} logs={logs} />
