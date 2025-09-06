@@ -39,8 +39,6 @@ const Home = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setLogs(response.data);
-      console.log("response.data ", response.data);
-      console.log("logs ", logs);
     } catch (error) {
       console.error("Error fetching logs:", error);
       if (error.response?.status === 401) {
@@ -54,8 +52,6 @@ const Home = () => {
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
     const id = decoded.user.id;
-    console.log("--id-- ", id);
-    console.log("--logData-- ", logData);
     try {
       await axios.post(
         `${API_BASE_URL}/content`,
@@ -77,7 +73,6 @@ const Home = () => {
 
   const handleUpdateLog = async (updatedLog) => {
     const token = localStorage.getItem("token");
-    console.log("-", updatedLog.raw_content);
     try {
       await axios.put(
         `${API_BASE_URL}/content/${updatedLog.id}`,
@@ -95,12 +90,10 @@ const Home = () => {
 
   const handleDeleteLog = async (logId) => {
     const token = localStorage.getItem("token");
-    console.log("-logId- ", logId);
     try {
       await axios.delete(`${API_BASE_URL}/content/${logId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(`Log ${logId} deleted.`);
       fetchLogs();
     } catch (error) {
       console.error("Error deleting log:", error);

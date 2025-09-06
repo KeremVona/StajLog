@@ -85,7 +85,7 @@ export const deleteLogHandler = async (req, res) => {
 };
 
 export const generateHandler = async (req, res) => {
-  const { raw_content, day } = req.body;
+  const { raw_content, day, id } = req.body;
   const userId = req.user.id;
 
   if (!raw_content) {
@@ -96,13 +96,14 @@ export const generateHandler = async (req, res) => {
 
   try {
     // 1. Generate AI-enhanced content
-    const enhancedText = await generate(raw_content);
+    const generatedText = await generate(raw_content);
 
     // 2. Insert into DB
     const result = await pool.query(
-      `INSERT INTO logs (user_id, day_number, raw_content, generated_content) 
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [userId, day, raw_content, enhancedText]
+      `UPDATE logs 
+       SET raw_content = $1, generated_content = $2, updated_at = NOW()
+       WHERE id = $3 AND user_id = $4 RETURNING *`,
+      [raw_content, generatedText, id, userId]
     );
 
     // 3. Return the saved log

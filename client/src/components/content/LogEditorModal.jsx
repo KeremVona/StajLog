@@ -26,7 +26,7 @@ function LogEditorModal({ log, onClose, onUpdate }) {
       // Make a POST request to the enhancement endpoint
       const response = await axios.post(
         `${API_BASE_URL}/generate`,
-        { raw_content: rawContent, day: log.day_number },
+        { raw_content: rawContent, day: log.day_number, id: log.id },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
