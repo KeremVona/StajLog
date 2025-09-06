@@ -1,4 +1,5 @@
 import pool from "../../db.js";
+import { generate } from "../../utils/generate.js";
 
 // GET, POST, PUT, DELETE
 
@@ -32,13 +33,8 @@ export const postLogHandler = async (req, res) => {
 
 export const updateLogHandler = async (req, res) => {
   const { id } = req.params;
-  console.log("req.user ", req.user);
   const userId = req.user.id;
-  console.log("id ", id);
-  console.log("userId, ", userId);
   const { raw_content } = req.body;
-  console.log("raw_content ", raw_content);
-  console.log("-----------------");
 
   try {
     const log = await pool.query(
@@ -69,11 +65,6 @@ export const deleteLogHandler = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
 
-  console.log("-----");
-  console.log("id ", id);
-  console.log("userId", userId);
-  console.log("-----");
-
   try {
     const result = await pool.query(
       "DELETE FROM logs WHERE id = $1 AND user_id = $2 RETURNING *",
@@ -90,5 +81,34 @@ export const deleteLogHandler = async (req, res) => {
   } catch (err) {
     console.error("Error deleting log:", err.message);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const generateHandler = async (req, res) => {
+  const { raw_content, day } = req.body;
+  const userId = req.user.id;
+
+  if (!raw_content) {
+    return res
+      .status(400)
+      .json({ message: "Raw content is required for enhancement." });
+  }
+
+  try {
+    // 1. Generate AI-enhanced content
+    const enhancedText = await generate(raw_content);
+
+    // 2. Insert into DB
+    const result = await pool.query(
+      `INSERT INTO logs (user_id, day_number, raw_content, generated_content) 
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [userId, day, raw_content, enhancedText]
+    );
+
+    // 3. Return the saved log
+    return res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error("AI enhancement error:", err.message);
+    return res.status(500).json({ message: "AI enhancement failed." });
   }
 };

@@ -1,35 +1,50 @@
 import React, { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "http://localhost:5000/api/content";
 
 function LogEditorModal({ log, onClose, onUpdate }) {
   const [rawContent, setRawContent] = useState(log.raw_content);
-  const [aiContent, setAiContent] = useState(log.ai_content);
+  const [aiContent, setAiContent] = useState(
+    log.ai_content || log.generated_content
+  );
   const [isLoading, setIsLoading] = useState(false);
+  const [done, setDone] = useState(true);
 
   const handleEnhance = async () => {
     setIsLoading(true);
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Authentication token not found.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
+      // Make a POST request to the enhancement endpoint
       const response = await axios.post(
-        `${API_BASE_URL}/enhance`,
-        {
-          raw_content: rawContent,
-        },
+        `${API_BASE_URL}/generate`,
+        { raw_content: rawContent, day: log.day_number },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setAiContent(response.data.ai_content);
-      // Also update the parent state or database
-      onUpdate({
-        ...log,
-        raw_content: rawContent,
-        ai_content: response.data.ai_content,
-      });
+
+      // Get the enhanced text from the response
+      const newAiContent = response.data.ai_content;
+      setAiContent(newAiContent);
+      toast.success("Log enhanced successfully!");
+
+      // Update the parent component's state
+      onUpdate({ ...log, raw_content: rawContent, ai_content: newAiContent });
     } catch (error) {
-      console.error("Enhancement failed:", error);
+      console.error(
+        "Error enhancing log:",
+        error.response?.data || error.message
+      );
+      toast.error("Failed to enhance log with AI.");
     } finally {
       setIsLoading(false);
     }

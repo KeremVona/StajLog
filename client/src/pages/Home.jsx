@@ -38,6 +38,8 @@ const Home = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setLogs(response.data);
+      console.log("response.data ", response.data);
+      console.log("logs ", logs);
     } catch (error) {
       console.error("Error fetching logs:", error);
       if (error.response?.status === 401) {
