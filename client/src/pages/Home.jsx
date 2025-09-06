@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import LogForm from "../components/content/LogForm";
@@ -6,7 +7,7 @@ import Navbar from "../components/ui/Navbar";
 import AddLogForm from "../components/content/AddLogForm";
 import LogEditorModal from "../components/content/LogEditorModal";
 import LogList from "../components/content/LogList";
-import { useNavigate } from "react-router-dom";
+import LogsToPdf from "../components/content/LogsToPdf";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -108,6 +109,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar userName={username} />
+      <LogsToPdf logs={logs} />
       <div className="container mx-auto p-4">
         {/* Add New Log Section */}
         <AddLogForm onAddLog={handleAddLog} logs={logs} />
