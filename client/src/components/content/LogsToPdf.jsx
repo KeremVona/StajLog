@@ -2,39 +2,59 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
 
+/*
+Can you add a cover page (with student name, internship period, total days) before the logs?
+*/
+
 const LogsToPdf = ({ logs }) => {
-  // const [logs, setLogs] = useState([]);
-
-  /*useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get("http://localhost:5000/api/content", {
-        headers: {
-          Authorization: `Bearer  ${token}`,
-        },
-      })
-      .then((res) => setLogs(res.data))
-      .catch((err) => console.error(err));
-  }, []);*/
-
   const generatePDF = () => {
     const doc = new jsPDF();
-    let y = 10;
+    let y = 20;
+
+    console.log("logs ", logs);
 
     logs.forEach((log, index) => {
-      // Split text if it's too long
-      const splitText = doc.splitTextToSize(log.generated_content, 180);
-      doc.text(splitText, 10, y);
-      y += splitText.length * 10;
+      // Title or fallback to "Internship Day X"
+      const title =
+        log.title && log.title.trim() !== ""
+          ? log.title
+          : `Internship Day ${log.day_number || index + 1}`;
 
-      if (y > 280) {
+      // Add Title
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text(title, 10, y);
+      y += 10;
+
+      // Add Date if exists
+      if (log.made_at) {
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Date: ${new Date(log.made_at).toLocaleDateString()}`, 10, y);
+        y += 10;
+      }
+
+      // Add Generated Content
+      if (log.generated_content) {
+        const splitText = doc.splitTextToSize(log.generated_content, 180);
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        doc.text(splitText, 10, y);
+        y += splitText.length * 8;
+      }
+
+      // Page handling
+      if (y > 260 && index !== logs.length - 1) {
         doc.addPage();
-        y = 10;
+        y = 20;
+      } else {
+        y += 10; // spacing before next log
       }
     });
 
     doc.save("logs.pdf");
   };
+
   return (
     <div className="p-6">
       <h1 className="text-xl font-bold mb-4">Logs</h1>
