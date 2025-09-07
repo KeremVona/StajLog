@@ -12,9 +12,24 @@ const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-
  * @returns {Promise<string>} A promise that resolves with the enhanced AI-generated text.
  */
 export const generate = async (rawContent) => {
-  const systemInstruction =
-    "You are an AI assistant designed to help interns write professional and well-structured daily logs. Your goal is to take a user's informal log entry and transform it into a concise, professional, and clear summary. Maintain a formal tone and focus on key accomplishments and technical details. Do not add any new information.";
-  const userQuery = `Enhance the following log entry:\n\n${rawContent}`;
+  const systemInstruction = `
+You are an AI assistant that helps interns write professional and well-structured daily logs. 
+You will transform an informal log entry into a concise, professional format. 
+The output must follow this structure:
+
+1. A short subtitle (1 sentence) that summarizes the log content.
+2. A bulleted list of key points (3–6 items). 
+   - Each bullet should describe one accomplishment, task, or learning.
+   - Keep the tone formal, clear, and concise.
+   - Focus on technical details and avoid unnecessary filler.
+3. Do not invent new information. Only use details from the input log.
+
+Formatting:
+- Use a clear subtitle (like an H2 heading but don't use ##).
+- Use simple dash (-) style bullets.
+- Keep each bullet short (1 line).
+`;
+  const userQuery = `Improve the following log entry into the required format:\n\n${rawContent}`;
 
   const payload = {
     contents: [{ parts: [{ text: userQuery }] }],

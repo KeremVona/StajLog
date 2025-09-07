@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 
 function AddLogForm({ onAddLog, logs }) {
   const [day, setDay] = useState("");
+  const [title, setTitle] = useState("");
   const [rawContent, setRawContent] = useState("");
 
   const handleSubmit = (e) => {
@@ -17,8 +18,13 @@ function AddLogForm({ onAddLog, logs }) {
       toast.error(`A log for Day ${day} already exists.`);
       return;
     }
-    onAddLog({ day: parseInt(day, 10), raw_content: rawContent });
+    onAddLog({
+      day: parseInt(day, 10),
+      title: title.trim() || null,
+      raw_content: rawContent,
+    });
     setDay("");
+    setTitle("");
     setRawContent("");
   };
 
@@ -35,6 +41,13 @@ function AddLogForm({ onAddLog, logs }) {
           value={day}
           onChange={(e) => setDay(e.target.value)}
           className="flex-shrink-0 w-24 border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        <input
+          type="text"
+          placeholder="Optional title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
         />
         <textarea
           placeholder="What did you work on today?"
@@ -55,6 +68,7 @@ function AddLogForm({ onAddLog, logs }) {
           onClick={() =>
             onAddLog({
               day: parseInt(day, 10),
+              title: title.trim() || null,
               raw_content: rawContent,
               enhance: true,
             })

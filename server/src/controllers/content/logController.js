@@ -16,12 +16,14 @@ export const getAllLogsHandler = async (req, res) => {
 
 export const postLogHandler = async (req, res) => {
   // newLog.day_number, newLog.raw_content
-  const { day, raw_content, user_id } = req.body;
+  const { day, raw_content, user_id, title } = req.body;
 
   try {
     const result = await pool.query(
-      "INSERT INTO logs (day_number, raw_content, user_id) VALUES ($1, $2, $3)",
-      [day, raw_content, user_id]
+      `INSERT INTO logs (day_number, raw_content, user_id, title) 
+       VALUES ($1, $2, $3, $4) 
+       RETURNING *`,
+      [day, raw_content, user_id, title || null] // fallback to null
     );
     // console.log("User inserted with ID: ", res.rows[0].id);
     res.send(result);

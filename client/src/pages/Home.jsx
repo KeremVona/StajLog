@@ -102,7 +102,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar userName={username} />
-      <LogsToPdf logs={logs} />
+      <LogsToPdf logs={logs} studentName={username} />
       <div className="container mx-auto p-4">
         {/* Add New Log Section */}
         <AddLogForm onAddLog={handleAddLog} logs={logs} />
