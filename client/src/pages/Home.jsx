@@ -10,6 +10,8 @@ import LogList from "../components/content/LogList";
 import LogsToPdf from "../components/content/LogsToPdf";
 import LogsWithTemplate from "../components/content/LogsWithTemplate";
 
+import LogGenerator from "../components/content/LogGenerator";
+
 const API_BASE_URL = "http://localhost:5000/api";
 
 const Home = () => {
@@ -103,6 +105,8 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar userName={username} />
+      <hr />
+      <LogGenerator logs={logs} studentName={username} />
       <LogsToPdf logs={logs} studentName={username} />
       <LogsWithTemplate logs={logs} studentName={username} />
       <div className="container mx-auto p-4">
