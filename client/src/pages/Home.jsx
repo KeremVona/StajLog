@@ -8,6 +8,7 @@ import AddLogForm from "../components/content/AddLogForm";
 import LogEditorModal from "../components/content/LogEditorModal";
 import LogList from "../components/content/LogList";
 import LogsToPdf from "../components/content/LogsToPdf";
+import LogsWithTemplate from "../components/content/LogsWithTemplate";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
@@ -103,6 +104,7 @@ const Home = () => {
     <div className="min-h-screen bg-gray-100">
       <Navbar userName={username} />
       <LogsToPdf logs={logs} studentName={username} />
+      <LogsWithTemplate logs={logs} studentName={username} />
       <div className="container mx-auto p-4">
         {/* Add New Log Section */}
         <AddLogForm onAddLog={handleAddLog} logs={logs} />
