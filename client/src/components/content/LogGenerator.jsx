@@ -47,8 +47,11 @@ function LogGenerator({
 
       // 2. Prepare the data
 
-      // Find the log for day 1
-      const day1Log = logs.find((log) => log.day_number === 1);
+      const dayLogs = {};
+      logs.forEach((log) => {
+        dayLogs[`day${log.day_number}_generated_content`] =
+          log.generated_content;
+      });
 
       const data = {
         student_name: studentName,
@@ -58,7 +61,7 @@ function LogGenerator({
           day_number: log.day_number,
           generated_content: log.generated_content,
         })),
-        day1_generated_content: day1Log ? day1Log.generated_content : "N/A",
+        ...dayLogs,
       };
 
       // 3. Set the data
