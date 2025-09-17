@@ -39,7 +39,6 @@ Formatting:
     tools: [{ google_search: {} }],
   };
 
-  console.log("Calling API...");
   try {
     const response = await axios.post(API_URL, payload, {
       headers: { "Content-Type": "application/json" },
@@ -50,7 +49,6 @@ Formatting:
       response.data.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (enhancedText) {
-      console.log("Enhancement successful.");
       return enhancedText;
     } else {
       console.error("AI response format is not as expected.");

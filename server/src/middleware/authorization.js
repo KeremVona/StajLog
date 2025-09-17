@@ -20,10 +20,6 @@ export default function (req, res, next) {
     const verify = jwt.verify(token, process.env.jwtSecret);
 
     req.user = verify.user;
-
-    console.log("--req.user-- ", req.user);
-    console.log("--verify-- ", verify);
-    console.log("--verify.user-- ", verify.user);
     next();
   } catch (err) {
     res.status(401).json({ msg: "Token is not valid" });

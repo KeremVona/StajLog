@@ -90,6 +90,8 @@ export const generateHandler = async (req, res) => {
   const { raw_content, day, id } = req.body;
   const userId = req.user.id;
 
+  console.log("request received");
+
   if (!raw_content) {
     return res
       .status(400)
@@ -99,6 +101,8 @@ export const generateHandler = async (req, res) => {
   try {
     // 1. Generate AI-enhanced content
     const generatedText = await generate(raw_content);
+
+    console.log("generated text ", generatedText.length);
 
     // 2. Insert into DB
     const result = await pool.query(
