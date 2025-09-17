@@ -78,23 +78,11 @@ const Login = () => {
               onChange={(e) => handleChange(e)}
               className="w-full border border-gray-300 py-2 pl-3 rounded mt-2 outline-none focus:ring-indigo-600"
             />
-            <a
-              href="#"
-              className="text-sm font-thin text-gray-800 hover:underline mt-2 inline-block hover:text-indigo-600"
-            >
-              Forget Password
-            </a>
-            <Link
-              to="/register"
-              className="text-sm font-thin text-gray-800 hover:underline mt-2 inline-block hover:text-indigo-600"
-            >
-              Don't have an account?
-            </Link>
           </div>
 
           <div className="mb-6">
             <label htmlFor="password" className="block text-gray-800 font-bold">
-              password:
+              Password:
             </label>
             <input
               type="password"
@@ -104,6 +92,18 @@ const Login = () => {
               onChange={(e) => handleChange(e)}
               className="w-full border border-gray-300 py-2 pl-3 rounded mt-2 outline-none focus:ring-indigo-600"
             />
+            <a
+              href="#"
+              className="text-sm font-thin text-gray-800 hover:underline mt-2 inline-block hover:text-indigo-600"
+            >
+              Forget Password
+            </a>
+            <Link
+              to="/register"
+              className="ml-2 text-sm font-thin text-gray-800 hover:underline mt-2 inline-block hover:text-indigo-600"
+            >
+              Don't have an account?
+            </Link>
           </div>
 
           <button
