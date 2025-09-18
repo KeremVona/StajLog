@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -63,56 +64,92 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="max-w-xl py-6 px-8 h-80 mt-20 bg-white rounded shadow-xl">
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="email" className="block text-gray-800 font-bold">
-              Email:
-            </label>
-            <input
-              type="text"
-              name="email"
-              id="email"
-              placeholder="@email"
-              onChange={(e) => handleChange(e)}
-              className="w-full border border-gray-300 py-2 pl-3 rounded mt-2 outline-none focus:ring-indigo-600"
-            />
-          </div>
+    <div className="bg-gray-100 flex h-screen items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div className="bg-white shadow-md rounded-md p-6">
+          <img
+            className="mx-auto h-12 w-auto"
+            src="https://www.svgrepo.com/show/499664/user-happy.svg"
+            alt="User Icon"
+          />
 
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-800 font-bold">
-              Password:
-            </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="password"
-              onChange={(e) => handleChange(e)}
-              className="w-full border border-gray-300 py-2 pl-3 rounded mt-2 outline-none focus:ring-indigo-600"
-            />
-            <a
-              href="#"
-              className="text-sm font-thin text-gray-800 hover:underline mt-2 inline-block hover:text-indigo-600"
-            >
-              Forget Password
-            </a>
+          <h2 className="my-3 text-center text-3xl font-bold tracking-tight text-gray-900">
+            Hoşgeldin
+          </h2>
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={formData.email}
+                onChange={(e) => handleChange(e)}
+                required
+                className="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm 
+                           focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Şifre
+              </label>
+
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  value={formData.password}
+                  onChange={(e) => handleChange(e)}
+                  required
+                  className="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm 
+                 focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm pr-10"
+                />
+
+                {/* Toggle button inside input */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? "👁️" : "🔒"}
+                </button>
+              </div>
+            </div>
+
             <Link
               to="/register"
-              className="ml-2 text-sm font-thin text-gray-800 hover:underline mt-2 inline-block hover:text-indigo-600"
+              className="text-sm font-thin text-gray-800 hover:underline mt-2 inline-block hover:text-indigo-600"
             >
-              Don't have an account?
+              Bir hesabın yok mu? {"←"}
             </Link>
-          </div>
 
-          <button
-            type="submit"
-            className="cursor-pointer py-2 px-4 block mt-6 bg-indigo-500 text-white font-bold w-full text-center rounded"
-          >
-            Login
-          </button>
-        </form>
+            <div>
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md border border-transparent 
+                           bg-sky-400 py-2 px-4 text-sm font-medium text-white shadow-sm 
+                           hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 
+                           focus:ring-offset-2"
+              >
+                Giriş yap
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

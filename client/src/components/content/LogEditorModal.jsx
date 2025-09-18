@@ -77,8 +77,8 @@ function LogEditorModal({ log, onClose, onUpdate }) {
             </label>
             <div className="mt-1 p-2 bg-gray-50 border border-gray-300 rounded-md h-48 overflow-y-auto">
               {isLoading
-                ? "Enhancement in progress..."
-                : aiContent || "Not yet enhanced."}
+                ? "Geliştiriliyor..."
+                : aiContent || "Henüz geliştirilmedi."}
             </div>
           </div>
         </div>

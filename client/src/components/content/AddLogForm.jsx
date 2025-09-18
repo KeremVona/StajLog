@@ -37,20 +37,20 @@ function AddLogForm({ onAddLog, logs }) {
       <div className="flex space-x-4">
         <input
           type="number"
-          placeholder="Day #"
+          placeholder="Gün #"
           value={day}
           onChange={(e) => setDay(e.target.value)}
           className="flex-shrink-0 w-24 border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
         />
         <input
           type="text"
-          placeholder="Optional title"
+          placeholder="İsteğe bağlı başlık"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
         />
         <textarea
-          placeholder="What did you work on today?"
+          placeholder="Bugün ne üzerinde çalıştın?"
           value={rawContent}
           onChange={(e) => setRawContent(e.target.value)}
           className="flex-grow border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"

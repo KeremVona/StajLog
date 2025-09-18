@@ -23,6 +23,7 @@ The output must follow this structure:
    - Keep the tone formal, clear, and concise.
    - Focus on technical details and avoid unnecessary filler.
 3. Do not invent new information. Only use details from the input log.
+4. Give it in Turkish.
 
 Formatting:
 - Use a clear subtitle (like an H2 heading but don't use ##).
