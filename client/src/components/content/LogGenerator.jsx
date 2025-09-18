@@ -32,7 +32,7 @@ function LogGenerator({
 
   const generateAndDownload = async () => {
     if (!templateFile) {
-      alert("Please upload a template file first.");
+      alert("Lütfen önce bir şablon yükle.");
       return;
     }
 
@@ -77,10 +77,10 @@ function LogGenerator({
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       });
       saveAs(out, `internship_log_${studentName}.docx`);
-      alert("Document generated successfully!");
+      alert("Belge başarıyla üretildi!");
     } catch (error) {
       console.error("Error generating document:", error);
-      alert("An error occurred. Please check the console for details.");
+      alert("Bir hata oldu. Lütfen daha fazla detay için konsolu kontrol et.");
     }
   };
 
@@ -88,7 +88,7 @@ function LogGenerator({
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-bold text-center text-gray-800">
-          Internship Log Generator
+          Staj Defteri Jeneratörü
         </h1>
 
         <div className="space-y-4">
@@ -97,7 +97,7 @@ function LogGenerator({
               htmlFor="template-upload"
               className="mb-2 text-sm font-medium text-gray-700"
             >
-              Upload Template:
+              Şablon Yükle:
             </label>
             <input
               id="template-upload"
@@ -115,13 +115,13 @@ function LogGenerator({
 
           <div className="space-y-2">
             <p className="text-sm text-gray-600">
-              Student Name:{" "}
+              Öğrenci adı:{" "}
               <strong className="font-semibold text-gray-800">
                 {studentName}
               </strong>
             </p>
             <p className="text-sm text-gray-600">
-              Internship Period:{" "}
+              Staj Süresi:{" "}
               <strong className="font-semibold text-gray-800">
                 {internshipPeriod}
               </strong>
@@ -133,7 +133,7 @@ function LogGenerator({
           onClick={generateAndDownload}
           className="w-full px-4 py-3 text-lg font-semibold text-white transition duration-200 ease-in-out bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          Generate Log
+          Defteri üret
         </button>
       </div>
     </div>

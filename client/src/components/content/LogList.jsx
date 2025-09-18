@@ -8,19 +8,19 @@ function LogList({ logs, onEdit, onDelete }) {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Day
+              Gün
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Raw Content
+              Sade İçerik
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              AI Content
+              Yapay Zeka İçerik
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Last Updated
+              Son Güncelleme
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
+              İşlemler
             </th>
           </tr>
         </thead>
@@ -33,7 +33,7 @@ function LogList({ logs, onEdit, onDelete }) {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {log.ai_content ? (
-                  <span className="text-green-500">✔ Available</span>
+                  <span className="text-green-500">✔ Müsait</span>
                 ) : (
                   <span className="text-gray-400">✖</span>
                 )}
@@ -46,13 +46,13 @@ function LogList({ logs, onEdit, onDelete }) {
                   onClick={() => onEdit(log)}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
-                  Edit/View
+                  Değiştir/Bak
                 </button>
                 <button
                   onClick={() => onDelete(log.id)}
                   className="ml-2 text-red-600 hover:text-red-900"
                 >
-                  Delete
+                  Sil
                 </button>
               </td>
             </tr>

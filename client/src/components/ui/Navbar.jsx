@@ -2,7 +2,7 @@ function Navbar({ userName }) {
   return (
     <nav className="bg-white shadow p-4 flex justify-between items-center">
       <div className="text-xl font-bold text-gray-800">
-        Internship Log Helper
+        Staj Defteri Yardımcısı
       </div>
       <div className="relative">
         <button className="flex items-center space-x-2">

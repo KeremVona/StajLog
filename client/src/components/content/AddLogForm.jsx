@@ -33,7 +33,7 @@ function AddLogForm({ onAddLog, logs }) {
       onSubmit={handleSubmit}
       className="bg-white p-6 rounded-lg shadow-md mb-6"
     >
-      <h3 className="text-xl font-semibold mb-4">Add a New Log</h3>
+      <h3 className="text-xl font-semibold mb-4">Yeni bir kayıt ekle</h3>
       <div className="flex space-x-4">
         <input
           type="number"
@@ -61,7 +61,7 @@ function AddLogForm({ onAddLog, logs }) {
           type="submit"
           className="bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition duration-200"
         >
-          Save
+          Kaydet
         </button>
         <button
           type="button"
@@ -75,7 +75,7 @@ function AddLogForm({ onAddLog, logs }) {
           }
           className="bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
         >
-          Save & Enhance
+          Kaydet ve Geliştir
         </button>
       </div>
     </form>

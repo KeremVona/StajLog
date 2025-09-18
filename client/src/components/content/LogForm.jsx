@@ -99,7 +99,7 @@ const LogForm = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-2xl">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          Internship Log
+          Staj Defteri
         </h1>
 
         <div className="mb-4">
@@ -107,7 +107,7 @@ const LogForm = () => {
             htmlFor="day-number"
             className="block text-gray-700 font-medium mb-2"
           >
-            Day Number
+            Gün Numarası
           </label>
           <input
             id="day-number"
@@ -125,7 +125,7 @@ const LogForm = () => {
             htmlFor="log-text"
             className="block text-gray-700 font-medium mb-2"
           >
-            What I did today
+            Bugün ne yaptım
           </label>
           <textarea
             id="log-text"
@@ -140,7 +140,7 @@ const LogForm = () => {
                 log.length > CHAR_LIMIT ? "text-red-500" : "text-gray-500"
               }`}
             >
-              Character count: {log.length} / {CHAR_LIMIT}
+              Harf sayısı: {log.length} / {CHAR_LIMIT}
             </p>
           </div>
           {logError && <p className="mt-1 text-red-500 text-sm">{logError}</p>}
@@ -151,7 +151,7 @@ const LogForm = () => {
             onClick={handleReset}
             className="px-6 py-2 rounded-lg bg-gray-300 text-gray-700 font-semibold hover:bg-gray-400 transition-colors"
           >
-            Reset
+            Sıfırla
           </button>
           <button
             onClick={handleSave}
@@ -163,7 +163,7 @@ const LogForm = () => {
                   : "bg-indigo-400 cursor-not-allowed"
               }`}
           >
-            Save Log
+            Kayıtı Kaydet
           </button>
         </div>
       </div>

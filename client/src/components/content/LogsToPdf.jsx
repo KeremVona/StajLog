@@ -130,7 +130,7 @@ const LogsToPdf = ({ logs, studentName, internshipPeriod }) => {
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Logs</h1>
+      <h1 className="text-xl font-bold mb-4">Varsayılan PDF dosya</h1>
 
       <button
         onClick={generatePDF}

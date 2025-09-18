@@ -57,11 +57,13 @@ function LogEditorModal({ log, onClose, onUpdate }) {
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-4">
-        <h3 className="text-2xl font-bold mb-4">Edit Log: Day {log.day}</h3>
+        <h3 className="text-2xl font-bold mb-4">
+          Kayıtı güncelle: Gün {log.day}
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Raw Content
+              Sade İçerik
             </label>
             <textarea
               value={rawContent}
@@ -71,7 +73,7 @@ function LogEditorModal({ log, onClose, onUpdate }) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              AI Content
+              Yapay Zeka İçerik
             </label>
             <div className="mt-1 p-2 bg-gray-50 border border-gray-300 rounded-md h-48 overflow-y-auto">
               {isLoading
@@ -85,20 +87,20 @@ function LogEditorModal({ log, onClose, onUpdate }) {
             onClick={onClose}
             className="py-2 px-4 bg-gray-300 rounded-md hover:bg-gray-400"
           >
-            Cancel
+            İptal et
           </button>
           <button
             onClick={handleEnhance}
             className="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             disabled={isLoading}
           >
-            {isLoading ? "Enhancing..." : "Enhance with AI"}
+            {isLoading ? "Geliştiriliyor..." : "Yapay Zeka ile Geliştir"}
           </button>
           <button
             onClick={handleSave}
             className="py-2 px-4 bg-green-500 text-white rounded-md hover:bg-green-600"
           >
-            Update Log
+            Kayıtı Güncelle
           </button>
         </div>
       </div>
