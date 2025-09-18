@@ -7,6 +7,8 @@ import Register from "./pages/authentication/Register";
 import Login from "./pages/authentication/Login";
 import Home from "./pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import Home2 from "./pages/Home2";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -18,6 +20,14 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute content={<Home />} />} />
+          <Route
+            path="/dashboard"
+            element={<ProtectedRoute content={<Dashboard />} />}
+          />
+          <Route
+            path="/home2"
+            element={<ProtectedRoute content={<Home2 />} />}
+          />
         </Routes>
       </BrowserRouter>
     </>
