@@ -10,8 +10,8 @@ const Logs = ({ logs, onEdit, onDelete }) => {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-bold text-gray-800">Your Orders</h1>
-        <p className="text-gray-600">View and manage your recent orders.</p>
+        <h1 className="text-2xl font-bold text-gray-800">Defter kayıtların</h1>
+        <p className="text-gray-600">Defter kayıtlarına bak ve yönet.</p>
       </header>
       <div className="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
