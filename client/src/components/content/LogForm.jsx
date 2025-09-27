@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-// This is now a standalone component that can be imported
 const LogForm = () => {
-  // State for form inputs
   const [dayNumber, setDayNumber] = useState("");
   const [log, setLog] = useState("");
 
-  // State for validation errors
   const [dayError, setDayError] = useState("");
   const [logError, setLogError] = useState("");
 
-  // State to track form validity for button enabling
   const [isFormValid, setIsFormValid] = useState(false);
 
-  // Character limit for the log textarea
   const CHAR_LIMIT = 2000;
 
-  // UseEffect to run validation whenever 'day' or 'log' state changes
   useEffect(() => {
-    // Basic day validation: must be a number greater than or equal to 1
     const isDayValid =
       dayNumber !== "" && !isNaN(dayNumber) && Number(dayNumber) >= 1;
     setDayError(isDayValid ? "" : "Day must be a number ≥ 1");
 
-    // Basic log validation: cannot be empty and must be within the character limit
     const isLogValid = log.trim() !== "" && log.length <= CHAR_LIMIT;
     setLogError(
       isLogValid
@@ -34,33 +26,23 @@ const LogForm = () => {
         : `Log must not exceed ${CHAR_LIMIT} characters. (${log.length}/${CHAR_LIMIT})`
     );
 
-    // Update the form validity state
     setIsFormValid(isDayValid && isLogValid);
   }, [dayNumber, log]);
 
-  // Handle changes to the day input
   const handleDayChange = (e) => {
     const value = e.target.value;
-    // Allow empty string or numbers to be typed, validation will handle the rest
     if (value === "" || !isNaN(value)) {
       setDayNumber(value);
     }
   };
 
-  // Handle changes to the log textarea
   const handleLogChange = (e) => {
     const value = e.target.value;
-    // Update the log state as the user types
     setLog(value);
   };
 
-  // Handle Save button click
   const handleSave = async () => {
     if (isFormValid) {
-      // Logic for saving the log (e.g., sending to an API or local state)
-      // This is a placeholder for your actual saving logic
-      // In a real app, you would replace alert() with a modal or notification
-
       const token = localStorage.getItem("token");
 
       try {
@@ -82,12 +64,10 @@ const LogForm = () => {
       alert("Log saved successfully!");
       console.log("Day:", dayNumber);
       console.log("Log:", log);
-      // After saving, you might want to reset the form
       handleReset();
     }
   };
 
-  // Handle Reset button click
   const handleReset = () => {
     setDayNumber("");
     setLog("");
@@ -111,7 +91,7 @@ const LogForm = () => {
           </label>
           <input
             id="day-number"
-            type="text" // Using type="text" to allow custom validation
+            type="text"
             value={dayNumber}
             onChange={handleDayChange}
             className="w-full px-4 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"

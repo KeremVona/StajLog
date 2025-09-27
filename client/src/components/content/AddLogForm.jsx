@@ -8,18 +8,27 @@ function AddLogForm({ onAddLog, logs }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!day || !rawContent) {
+
+    if (day == "") {
+      setDay(logs.length + 1);
+    }
+
+    const dayUse = day === "" ? logs.length + 1 : parseInt(day, 10);
+
+    if (!dayUse || !rawContent) {
       toast.error("Day and content are required.");
       return;
     }
-    // Prevent duplicate days
+
     const dayExists = logs.some((log) => log.day === parseInt(day, 10));
+
     if (dayExists) {
       toast.error(`A log for Day ${day} already exists.`);
       return;
     }
+
     onAddLog({
-      day: parseInt(day, 10),
+      day: dayUse,
       title: title.trim() || null,
       raw_content: rawContent,
     });
@@ -37,7 +46,7 @@ function AddLogForm({ onAddLog, logs }) {
       <div className="flex space-x-4">
         <input
           type="number"
-          placeholder="Gün #"
+          placeholder={logs.length + 1 + ". gün"}
           value={day}
           onChange={(e) => setDay(e.target.value)}
           className="flex-shrink-0 w-24 border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"

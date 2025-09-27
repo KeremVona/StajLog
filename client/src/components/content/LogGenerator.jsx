@@ -3,7 +3,6 @@ import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import { saveAs } from "file-saver";
 
-// A helper function to load the uploaded file as a binary string
 const loadFile = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -37,15 +36,12 @@ function LogGenerator({
     }
 
     try {
-      // 1. Load the uploaded file
       const content = await loadFile(templateFile);
       const zip = new PizZip(content);
       const doc = new Docxtemplater(zip, {
         paragraphLoop: true,
         linebreaks: true,
       });
-
-      // 2. Prepare the data
 
       const dayLogs = {};
       logs.forEach((log) => {
@@ -56,7 +52,6 @@ function LogGenerator({
       const data = {
         student_name: studentName,
         internship_dates: internshipPeriod,
-        // Pass the logs array directly
         logs: logs.map((log) => ({
           day_number: log.day_number,
           generated_content: log.generated_content,
@@ -64,13 +59,10 @@ function LogGenerator({
         ...dayLogs,
       };
 
-      // 3. Set the data
       doc.setData(data);
 
-      // 4. Render the document
       doc.render();
 
-      // 5. Generate the new file and save it
       const out = doc.getZip().generate({
         type: "blob",
         mimeType:

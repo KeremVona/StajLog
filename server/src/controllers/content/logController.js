@@ -74,12 +74,10 @@ export const deleteLogHandler = async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      // No rows deleted → log not found for this user
       return res.status(404).json({ message: "Log not found." });
     }
 
-    console.log(`Log ${id} deleted for user ${userId}`);
-    res.status(204).send(); // No content
+    res.status(204).send();
   } catch (err) {
     console.error("Error deleting log:", err.message);
     res.status(500).json({ message: "Server error" });
@@ -99,12 +97,10 @@ export const generateHandler = async (req, res) => {
   }
 
   try {
-    // 1. Generate AI-enhanced content
     const generatedText = await generate(raw_content);
 
     console.log("generated text ", generatedText.length);
 
-    // 2. Insert into DB
     const result = await pool.query(
       `UPDATE logs 
        SET raw_content = $1, generated_content = $2, updated_at = NOW()
@@ -112,7 +108,6 @@ export const generateHandler = async (req, res) => {
       [raw_content, generatedText, id, userId]
     );
 
-    // 3. Return the saved log
     return res.status(200).json(result.rows[0]);
   } catch (err) {
     console.error("AI enhancement error:", err.message);

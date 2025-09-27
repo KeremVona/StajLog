@@ -23,7 +23,6 @@ function LogEditorModal({ log, onClose, onUpdate }) {
     }
 
     try {
-      // Make a POST request to the enhancement endpoint
       const response = await axios.post(
         `${API_BASE_URL}/generate`,
         { raw_content: rawContent, day: log.day_number, id: log.id },
@@ -32,12 +31,10 @@ function LogEditorModal({ log, onClose, onUpdate }) {
         }
       );
 
-      // Get the enhanced text from the response
       const newAiContent = response.data.ai_content;
       setAiContent(newAiContent);
       toast.success("Log enhanced successfully!");
 
-      // Update the parent component's state
       onUpdate({ ...log, raw_content: rawContent, ai_content: newAiContent });
     } catch (error) {
       console.error(

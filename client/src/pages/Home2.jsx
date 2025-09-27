@@ -8,9 +8,7 @@ import LogEditorModal from "../components/content/LogEditorModal";
 import AddLogForm from "../components/content/AddLogForm";
 import LogGenerator from "../components/content/LogGenerator";
 
-{
-  /* home2 */
-}
+// home2
 import Sidebar from "../components/home2/Sidebar";
 import Logs from "../components/home2/Logs";
 import Dashboard from "../components/home2/Dasboard";
@@ -28,7 +26,6 @@ const Home2 = () => {
 
   const navigate = useNavigate();
 
-  // Authentication Check
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -55,7 +52,6 @@ const Home2 = () => {
     }
   };
 
-  // Add Log
   const handleAddLog = async (logData) => {
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
@@ -68,13 +64,12 @@ const Home2 = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      fetchLogs(); // Refresh the log list
+      fetchLogs();
     } catch (error) {
       console.error("Error adding log:", error);
     }
   };
 
-  // Edit Log
   const handleEditLog = (log) => {
     setEditingLog(log);
   };
@@ -89,8 +84,8 @@ const Home2 = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setEditingLog(null); // Close the modal
-      fetchLogs(); // Refresh the list
+      setEditingLog(null);
+      fetchLogs();
     } catch (error) {
       console.error("Error updating log:", error);
     }

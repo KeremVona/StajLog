@@ -39,8 +39,8 @@ const Logs = ({ logs, onEdit, onDelete }) => {
                   {truncateText(log.raw_content, 50)}
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap text-sm text-green-600">
-                  {log.ai_content ? (
-                    <span className="text-green-500">✔ Müsait</span>
+                  {log.generated_content ? (
+                    <span className="text-green-500">✔</span>
                   ) : (
                     <span className="text-gray-400">✖</span>
                   )}
