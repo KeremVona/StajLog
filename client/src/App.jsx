@@ -8,6 +8,20 @@ import Login from "./pages/authentication/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import Home2 from "./pages/Home2";
 
+/*
+
+
+____   ____                   
+\   \ /   /___   ____ _____   
+ \   Y   /  _ \ /    \\__  \  
+  \     (  <_> )   |  \/ __ \_
+   \___/ \____/|___|  (____  /
+                    \/     \/ 
+
+
+
+*/
+
 function App() {
   const [count, setCount] = useState(0);
 
