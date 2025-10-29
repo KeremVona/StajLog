@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/authentication/userRoutes.js";
 import logRoutes from "./routes/content/logRoutes.js";
 
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "../.env", quiet: true });
 
 const app = express();
 

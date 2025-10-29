@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "../../.env" });
+dotenv.config({ path: "../../.env", quiet: true });
 
 function jwtGenerator(user_id, user_name) {
   const payload = {
