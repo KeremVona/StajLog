@@ -7,6 +7,7 @@ import Register from "./pages/authentication/Register";
 import Login from "./pages/authentication/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import Home2 from "./pages/Home2";
+import { Navigate } from "react-router";
 
 /*
 
@@ -35,6 +36,7 @@ function App() {
             path="/home"
             element={<ProtectedRoute content={<Home2 />} />}
           />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </>

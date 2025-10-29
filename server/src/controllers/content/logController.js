@@ -53,8 +53,6 @@ export const updateLogHandler = async (req, res) => {
       [raw_content || log.rows[0].raw_content, id]
     );
 
-    console.log("updatedLog ", updatedLog);
-
     console.log(`Log ${id} updated for user ${userId}`);
     res.status(200).json(updatedLog.rows[0]);
   } catch (err) {
@@ -88,8 +86,6 @@ export const generateHandler = async (req, res) => {
   const { raw_content, day, id } = req.body;
   const userId = req.user.id;
 
-  console.log("request received");
-
   if (!raw_content) {
     return res
       .status(400)
@@ -98,8 +94,6 @@ export const generateHandler = async (req, res) => {
 
   try {
     const generatedText = await generate(raw_content);
-
-    console.log("generated text ", generatedText.length);
 
     const result = await pool.query(
       `UPDATE logs 
