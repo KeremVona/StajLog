@@ -1,4 +1,28 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+const API_URL = "http://localhost:5000/api/content/user";
+
 const AddLog = () => {
+  const [profileData, setProfileData] = useState();
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await axios.get(API_URL, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setProfileData(response.data);
+        console.log(profileData);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    getProfile();
+  }, []);
   return (
     <div className="space-y-6">
       <header>
