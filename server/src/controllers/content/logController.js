@@ -4,8 +4,11 @@ import { generate } from "../../utils/generate.js";
 // GET, POST, PUT, DELETE
 
 export const getAllLogsHandler = async (req, res) => {
+  const id = req.user.id;
   try {
-    const respone = await pool.query("SELECT * FROM logs");
+    const respone = await pool.query("SELECT * FROM logs WHERE user_id = $1", [
+      id,
+    ]);
 
     res.status(200).send(respone.rows);
   } catch (err) {
