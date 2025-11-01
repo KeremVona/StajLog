@@ -11,10 +11,11 @@ import LogGenerator from "../components/content/LogGenerator";
 // home2
 import Sidebar from "../components/home2/Sidebar";
 import Logs from "../components/home2/Logs";
-import Dashboard from "../components/home2/Dasboard";
-import AddLog from "../components/home2/AddLog";
+import Dashboard from "../components/home2/Dashboard";
+import UserProfile from "../components/home2/UserProfile";
 
 const API_BASE_URL = "http://localhost:5000/api";
+const API_URL = "http://localhost:5000/api/content/user";
 
 const Home2 = () => {
   const [logs, setLogs] = useState([]);
@@ -25,9 +26,26 @@ const Home2 = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
 
   const navigate = useNavigate();
+  const [workDays, setWorkDays] = useState();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
+    const handleFetch = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const result = await axios.get(API_URL, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setWorkDays(result.data.work_days);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    handleFetch();
+
     if (!token) {
       navigate("/login");
     } else {
@@ -123,7 +141,7 @@ const Home2 = () => {
         )}
         <main className="flex-1 p-4 md:p-6 overflow-y-auto">
           {activeSection === "dashboard" && (
-            <Dashboard username={username} logs={logs} />
+            <Dashboard username={username} logs={logs} workDays={workDays} />
           )}
           {activeSection === "orders" && (
             <Logs
@@ -138,7 +156,7 @@ const Home2 = () => {
           {activeSection === "disa_aktar" && (
             <LogGenerator logs={logs} studentName={username} />
           )}
-          {activeSection === "profile" && <AddLog />}
+          {activeSection === "profile" && <UserProfile />}
         </main>
       </div>
     </>

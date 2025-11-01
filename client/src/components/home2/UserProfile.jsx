@@ -6,11 +6,7 @@ import { jwtDecode } from "jwt-decode";
 
 const API_URL = "http://localhost:5000/api/content/user";
 
-/*
-work_days, field, student_number, company_name, company_address, start_date, end_date
-*/
-
-const AddLog = () => {
+const UserProfile = () => {
   const [profileData, setProfileData] = useState();
   const [formData, setFormData] = useState({
     work_days: 0,
@@ -34,7 +30,6 @@ const AddLog = () => {
           },
         });
         setProfileData(response.data);
-        console.log(profileData);
       } catch (err) {
         console.error(err.message);
       }
@@ -66,7 +61,6 @@ const AddLog = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(result);
     } catch (err) {
       console.error(err.message);
     }
@@ -191,4 +185,4 @@ const AddLog = () => {
   );
 };
 
-export default AddLog;
+export default UserProfile;
