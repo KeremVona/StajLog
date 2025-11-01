@@ -25,8 +25,10 @@ const Home2 = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const [activeSection, setActiveSection] = useState("dashboard");
 
-  const navigate = useNavigate();
   const [workDays, setWorkDays] = useState();
+  const [userProfile, setUserProfile] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -154,7 +156,11 @@ const Home2 = () => {
             <AddLogForm onAddLog={handleAddLog} logs={logs} />
           )}
           {activeSection === "disa_aktar" && (
-            <LogGenerator logs={logs} studentName={username} />
+            <LogGenerator
+              logs={logs}
+              studentName={username}
+              internshipPeriod={workDays}
+            />
           )}
           {activeSection === "profile" && <UserProfile />}
         </main>

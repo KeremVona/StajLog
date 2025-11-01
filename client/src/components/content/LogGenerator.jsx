@@ -15,11 +15,19 @@ const loadFile = (file) => {
     reader.readAsBinaryString(file);
   });
 };
-
+/*
+    work_days, field, student_number, company_name, company_address, start_date, end_date
+*/
 function LogGenerator({
   logs,
   studentName,
   internshipPeriod,
+  field,
+  student_name,
+  company_name,
+  company_address,
+  start_date,
+  end_date,
   enhanceWithAI = true,
 }) {
   const [templateFile, setTemplateFile] = useState(null);
