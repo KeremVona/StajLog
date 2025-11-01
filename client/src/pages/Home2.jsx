@@ -26,7 +26,15 @@ const Home2 = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
 
   const [workDays, setWorkDays] = useState();
-  const [userProfile, setUserProfile] = useState({});
+  const [userProfile, setUserProfile] = useState({
+    field: "",
+    student_name: "",
+    student_number: "",
+    company_name: "",
+    company_address: "",
+    start_date: "",
+    end_date: "",
+  });
 
   const navigate = useNavigate();
 
@@ -42,6 +50,16 @@ const Home2 = () => {
           },
         });
         setWorkDays(result.data.work_days);
+        setUserProfile((prevProfile) => ({
+          ...prevProfile,
+          field: result.data.field,
+          student_name: result.data.student_name,
+          student_number: result.data.student_number,
+          company_name: result.data.company_name,
+          company_address: result.data.company_address,
+          start_date: result.data.start_date,
+          end_date: result.data.end_date,
+        }));
       } catch (err) {
         console.error(err.message);
       }
@@ -160,6 +178,12 @@ const Home2 = () => {
               logs={logs}
               studentName={username}
               internshipPeriod={workDays}
+              field={userProfile.field}
+              student_number={userProfile.student_number}
+              company_name={userProfile.company_name}
+              company_address={userProfile.company_address}
+              start_date={userProfile.start_date}
+              end_date={userProfile.end_date}
             />
           )}
           {activeSection === "profile" && <UserProfile />}

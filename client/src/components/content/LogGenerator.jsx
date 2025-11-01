@@ -15,15 +15,13 @@ const loadFile = (file) => {
     reader.readAsBinaryString(file);
   });
 };
-/*
-    work_days, field, student_number, company_name, company_address, start_date, end_date
-*/
+
 function LogGenerator({
   logs,
   studentName,
   internshipPeriod,
   field,
-  student_name,
+  student_number,
   company_name,
   company_address,
   start_date,
@@ -56,10 +54,19 @@ function LogGenerator({
         dayLogs[`day${log.day_number}_generated_content`] =
           log.generated_content;
       });
-
+      /*
+    work_days, field, student_number, company_name, company_address, start_date, end_date
+*/
+      console.log(student_number);
       const data = {
         student_name: studentName,
         internship_dates: internshipPeriod,
+        field: field,
+        student_number: student_number,
+        company_name: company_name,
+        company_address: company_address,
+        start_date: start_date,
+        end_date: end_date,
         logs: logs.map((log) => ({
           day_number: log.day_number,
           generated_content: log.generated_content,
