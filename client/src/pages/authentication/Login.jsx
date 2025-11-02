@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router";
 
+// DEVELOPER LOGIN ENABLED
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
+
+  const developer = { email: "admin@gmail.com", password: "admin" };
 
   const navigate = useNavigate();
 
@@ -58,6 +62,36 @@ const Login = () => {
       console.error(err.message);
     }
   };
+
+  // IMPORTANT: CHANGE IN PRODUCTION MODE
+  const developerLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/authentication/login",
+        developer
+      );
+
+      localStorage.setItem("token", response.data.jwtToken);
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 400);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const callback = (KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.code === "KeyC") {
+        developerLogin();
+      }
+    };
+    document.addEventListener("keydown", callback);
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -146,6 +180,14 @@ const Login = () => {
                            focus:ring-offset-2"
               >
                 Giriş yap
+              </button>
+              <button
+                className="flex w-full justify-center rounded-md border border-transparent 
+                           bg-sky-400 py-2 px-4 text-sm font-medium text-white shadow-sm 
+                           hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 
+                           focus:ring-offset-2 mt-2"
+              >
+                Giriş yap (Geliştirici {developer.email} Ctrl + C)
               </button>
             </div>
           </form>
