@@ -1,0 +1,111 @@
+// generator client {
+//   provider = "prisma-client"
+//   output   = "../generated/prisma"
+// }
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --------------------------------------
+// ENUMS
+// --------------------------------------
+
+enum LogStatus {
+  DRAFT
+  COMPLETED
+}
+
+enum TemplateType {
+  APPLICATION
+  ACCEPTANCE
+  LOG_SUMMARY
+}
+
+// --------------------------------------
+// MODELS
+// --------------------------------------
+
+model University {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique // e.g., "FSMVU"
+  logoUrl String?
+
+  users     User[]
+  templates DocumentTemplate[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id          Int     @id @default(autoincrement())
+  // Ensure email casing is normalized (e.g., toLowerCase()) at the auth/service layer to prevent 401 mismatches
+  email       String  @unique
+  fullName    String
+  phoneNumber String?
+  address     String?
+  nationalId  String? // Optional to respect privacy
+
+  universityId Int
+  university   University @relation(fields: [universityId], references: [id], onDelete: Restrict)
+
+  internships Internship[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Internship {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  companyName       String
+  companySector     String
+  companyAddress    String
+  companyPhone      String?
+  companyWebAddress String?
+
+  startDate DateTime
+  endDate   DateTime
+
+  logs InternshipLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InternshipLog {
+  id           Int        @id @default(autoincrement())
+  internshipId Int
+  internship   Internship @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+
+  logDate         DateTime // To track the specific day of the log (Day 1, Day 2)
+  content         String    @db.Text // Raw user input. Remember to sanitize payloads for XSS before rendering in the UI
+  improvedContent String?   @db.Text // The AI-generated output
+  isImproved      Boolean   @default(false)
+  status          LogStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DocumentTemplate {
+  id           Int        @id @default(autoincrement())
+  universityId Int
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  type     TemplateType
+  filePath String // AWS S3 URL or local path to the .docx template
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Ensures a university only has one active template per specific document type
+  @@unique([universityId, type])
+}
