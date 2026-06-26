@@ -11,7 +11,7 @@ export const getUser = async (email: string) => {
     return 0;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code == "P2018") {
+      if (error.code == "P2025") {
         throw new Error("User with this email not found.");
       }
     }
@@ -30,7 +30,7 @@ export const getUserById = async (id: number) => {
     return 0;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code == "P2018") {
+      if (error.code == "P2025") {
         throw new Error("User with this id not found.");
       }
     }
@@ -71,7 +71,7 @@ export const updateUser = async (
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2018") {
+      if (error.code === "P2025") {
         throw new Error("User with this id not found.");
       }
     }
@@ -87,7 +87,7 @@ export const deleteUser = async (id: number): Promise<User> => {
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2018") {
+      if (error.code === "P2025") {
         throw new Error("User with this id not found.");
       }
     }
