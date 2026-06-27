@@ -2,6 +2,9 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./dist",
+    "paths": {
+      "#/*": ["./src/*"]
+    },
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module

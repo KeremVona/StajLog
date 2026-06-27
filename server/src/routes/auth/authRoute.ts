@@ -7,6 +7,7 @@ import {
 } from "#/controllers/auth/authController";
 import validInfo from "#/middlewares/auth/validInfo";
 import authorize from "#/middlewares/auth/authorization";
+
 const router = express.Router();
 
 router.post("/register", validInfo, registerHandler);
