@@ -67,7 +67,7 @@ export const loginHandler = async (
 
     return res.json({ jwtToken });
   } catch (err) {
-    console.error("Server error - loginHandler");
+    console.error("Server error - loginHandler", err);
     if (err instanceof Error) {
       return res.status(500).send("Server error");
     }

@@ -1,4 +1,39 @@
+import { useNavigate } from "react-router";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import useFormData from "../../hooks/useFormData";
+import { useEffect } from "react";
+import { loginUser } from "../../features/auth/authActions";
+
 const Login = () => {
+  const { formData, handleInputChange } = useFormData({
+    email: "",
+    password: "",
+  });
+  const { loading, error, success, userToken } = useAppSelector(
+    (state) => state.auth,
+  );
+
+  const { email, password } = formData;
+
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(loginUser({ email, password }));
+  };
+
+  useEffect(() => {
+    if (userToken) navigate("/home");
+    if (success) navigate("/home");
+  }, [success, userToken, navigate]);
+
+  useEffect(() => {
+    if (error !== null) {
+      alert(error);
+    }
+  }, [error]);
   return (
     <div className="min-h-screen bg-zinc-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -12,7 +47,7 @@ const Login = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm border border-zinc-200 sm:rounded-xl sm:px-10">
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
               <label
@@ -27,6 +62,8 @@ const Login = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  onChange={handleInputChange}
+                  value={email}
                   required
                   className="block w-full appearance-none rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
                   placeholder="student@university.edu"
@@ -48,6 +85,8 @@ const Login = () => {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  onChange={handleInputChange}
+                  value={password}
                   required
                   className="block w-full appearance-none rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
                 />
@@ -85,6 +124,7 @@ const Login = () => {
             <div className="pt-2">
               <button
                 type="submit"
+                disabled={loading}
                 className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2.5 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
               >
                 Sign in

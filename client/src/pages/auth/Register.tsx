@@ -14,7 +14,7 @@ const Register = () => {
 
   const { email, password, confirmPassword } = formData;
 
-  const { loading, error, success, userInfo } = useAppSelector(
+  const { loading, error, success, userToken } = useAppSelector(
     (state: RootState) => state.auth,
   );
 
@@ -38,9 +38,9 @@ const Register = () => {
   }, [error]);
 
   useEffect(() => {
+    if (userToken) navigate("/home");
     if (success) navigate("/login");
-    if (userInfo) navigate("/home");
-  }, [navigate, userInfo, success]);
+  }, [navigate, userToken, success]);
 
   return (
     <div className="min-h-screen bg-zinc-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
@@ -112,7 +112,7 @@ const Register = () => {
               <div className="mt-1">
                 <input
                   id="password_confirmation"
-                  name="password_confirmation"
+                  name="confirmPassword"
                   type="password"
                   autoComplete="new-password"
                   onChange={handleInputChange}

@@ -10,8 +10,6 @@ function jwtGenerator(user_id: number) {
     },
   };
 
-  console.log(user_id);
-
   const secret = process.env.Secret;
 
   if (!secret) {
