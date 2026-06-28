@@ -20,9 +20,11 @@ export const getInternships = async () => {
   }
 };
 
-export const getInternshipById = async (id: number) => {
+export const getInternshipById = async (internshipId: number) => {
   try {
-    const internship = await prisma.internship.findFirst({ where: { id: id } });
+    const internship = await prisma.internship.findFirst({
+      where: { id: internshipId },
+    });
     if (internship) return internship;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -37,7 +39,6 @@ export const getInternshipById = async (id: number) => {
 
 export const makeInternship = async (
   makeInternshipBody: MakeInternshipBody,
-  userId: number,
 ) => {
   try {
     const internship = await prisma.internship.create({
@@ -49,7 +50,7 @@ export const makeInternship = async (
         companyWebAddress: makeInternshipBody.companyWebAddress,
         startDate: makeInternshipBody.startDate,
         endDate: makeInternshipBody.endDate,
-        userId: userId,
+        userId: makeInternshipBody.userId,
       },
     });
 
