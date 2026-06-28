@@ -3,7 +3,7 @@ import type { RootState } from "../../app/store";
 import useFormData from "../../hooks/useFormData";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { formData, handleInputChange } = useFormData({

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import useFormData from "../../hooks/useFormData";
 import { useEffect } from "react";
@@ -19,21 +19,28 @@ const Login = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password }));
-  };
-
-  useEffect(() => {
-    if (userToken) navigate("/home");
-    if (success) navigate("/home");
-  }, [success, userToken, navigate]);
-
-  useEffect(() => {
-    if (error !== null) {
-      alert(error);
+    try {
+      await dispatch(loginUser({ email, password })).unwrap();
+      // If successful, navigate here once
+      navigate("/home", { replace: true });
+    } catch (err) {
+      // Error handling is already done by Redux state,
+      // just leave the alert effect for the 'error' state
     }
-  }, [error]);
+  };
+  //  useEffect(() => {
+  //    if (userToken || success) {
+  //      navigate("/home", { replace: true });
+  //    }
+  //  }, [navigate, userToken, success]);
+
+  //  useEffect(() => {
+  //     if (error !== null) {
+  //       alert(error);
+  //     }
+  //   }, [error]);
   return (
     <div className="min-h-screen bg-zinc-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
