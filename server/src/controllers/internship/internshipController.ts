@@ -1,7 +1,4 @@
 import type {
-  AuthInternshipRequest,
-  AuthRequest,
-  AuthRequest2,
   EditInternshipBody,
   InternsipParams,
   MakeInternshipBody,
@@ -13,11 +10,18 @@ import {
   getInternships,
   makeInternship,
 } from "#/services/internship/internshipService.js";
-import { type Request, type RequestHandler, type Response } from "express";
+import { type RequestHandler } from "express";
 
-export const getInternshipsHandler = async (req: Request, res: Response) => {
+export const getInternshipsHandler: RequestHandler = async (req, res) => {
   try {
-    const internships = await getInternships();
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const internships = await getInternships(userId);
 
     return res.status(200).send(internships);
   } catch (error) {
@@ -32,9 +36,16 @@ export const getInternshipHandler: RequestHandler<{ id: string }> = async (
 ) => {
   try {
     const { id } = req.params;
-    const internship = await getInternshipById(Number(id));
+    const userId = req.user?.id;
 
-    return internship;
+    if (!userId) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    const internship = await getInternshipById(Number(id), userId);
+
+    return res.status(200).send(internship);
   } catch (error) {
     console.error("Server error - getInternshipHandler", error);
     return res.status(500).send("Server error");
@@ -53,7 +64,7 @@ export const makeInternshipHandler: RequestHandler<
 
     const internship = await makeInternship({ ...req.body, userId });
 
-    return internship;
+    return res.send(internship);
   } catch (error) {
     console.error("Server error - makeInternshipHandler", error);
     return res.status(500).send("Server error");
@@ -61,9 +72,9 @@ export const makeInternshipHandler: RequestHandler<
 };
 
 export const editInternshipHandler: RequestHandler<
-  InternsipParams,
-  any,
-  EditInternshipBody
+  InternsipParams, // Params
+  any, // Response body
+  EditInternshipBody // Request body
 > = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -92,7 +103,7 @@ export const deleteInternshipHandler: RequestHandler<{ id: string }> = async (
 
     await deleteInternship(Number(id));
 
-    return res.status(200);
+    return res.status(200).send("Deletion successful");
   } catch (error) {
     console.error("Server error - deleteInternshipHandler", error);
     return res.status(500).send("Server error");

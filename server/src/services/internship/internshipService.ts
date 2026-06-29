@@ -5,9 +5,11 @@ import type {
 import { prisma } from "#/utils/prisma";
 import { Prisma } from "@prisma/client";
 
-export const getInternships = async () => {
+export const getInternships = async (userId: number) => {
   try {
-    const internships = await prisma.internship.findMany();
+    const internships = await prisma.internship.findMany({
+      where: { userId: userId },
+    });
     if (internships.length > 0) return internships;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -20,10 +22,13 @@ export const getInternships = async () => {
   }
 };
 
-export const getInternshipById = async (internshipId: number) => {
+export const getInternshipById = async (
+  internshipId: number,
+  userId: number,
+) => {
   try {
     const internship = await prisma.internship.findFirst({
-      where: { id: internshipId },
+      where: { id: internshipId, userId: userId },
     });
     if (internship) return internship;
   } catch (error) {
@@ -41,9 +46,15 @@ export const makeInternship = async (
   makeInternshipBody: MakeInternshipBody,
 ) => {
   try {
+    const startDate = new Date(makeInternshipBody.startDate);
+    if (isNaN(startDate.getTime())) {
+      throw new Error("Invalid start date provided");
+    }
     const internship = await prisma.internship.create({
       data: {
         ...makeInternshipBody,
+        startDate: new Date(makeInternshipBody.startDate),
+        endDate: new Date(makeInternshipBody.endDate),
       },
     });
 
@@ -87,6 +98,7 @@ export const editInternship = async (
 export const deleteInternship = async (internshipId: number) => {
   try {
     await prisma.internship.delete({ where: { id: internshipId } });
+    return;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code == "P2025") {
