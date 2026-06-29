@@ -32,3 +32,11 @@ export interface AuthInternshipRequest extends Request<
 > {
   user?: { id: number };
 }
+
+export interface AuthRequest<P, B> extends Request<P, {}, B> {
+  user?: { id: number };
+}
+
+export interface AuthRequest2<P> extends Request<P, {}, {}> {
+  user?: { id: number };
+}

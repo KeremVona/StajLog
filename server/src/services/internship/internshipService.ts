@@ -43,14 +43,7 @@ export const makeInternship = async (
   try {
     const internship = await prisma.internship.create({
       data: {
-        companyAddress: makeInternshipBody.companyAddress,
-        companyName: makeInternshipBody.companyName,
-        companySector: makeInternshipBody.companySector,
-        companyPhone: makeInternshipBody.companyPhone,
-        companyWebAddress: makeInternshipBody.companyWebAddress,
-        startDate: makeInternshipBody.startDate,
-        endDate: makeInternshipBody.endDate,
-        userId: makeInternshipBody.userId,
+        ...makeInternshipBody,
       },
     });
 
@@ -68,19 +61,14 @@ export const makeInternship = async (
 
 export const editInternship = async (
   internshipId: number,
+  userId: number,
   editInternshipBody: EditInternshipBody,
 ) => {
   try {
     const internship = await prisma.internship.update({
-      where: { id: internshipId },
+      where: { id: internshipId, userId: userId },
       data: {
-        companyAddress: editInternshipBody.companyAddress,
-        companyName: editInternshipBody.companyName,
-        companySector: editInternshipBody.companySector,
-        companyPhone: editInternshipBody.companyPhone,
-        companyWebAddress: editInternshipBody.companyWebAddress,
-        startDate: editInternshipBody.startDate,
-        endDate: editInternshipBody.endDate,
+        ...editInternshipBody,
       },
     });
 

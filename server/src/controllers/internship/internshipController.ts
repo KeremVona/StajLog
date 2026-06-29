@@ -1,8 +1,13 @@
 import type {
   AuthInternshipRequest,
+  AuthRequest,
+  AuthRequest2,
+  EditInternshipBody,
   InternsipParams,
 } from "#/interfaces/internship/Internship.js";
 import {
+  deleteInternship,
+  editInternship,
   getInternshipById,
   getInternships,
   makeInternship,
@@ -49,6 +54,48 @@ export const makeInternshipHandler = async (
     return internship;
   } catch (error) {
     console.error("Server error - makeInternshipHandler", error);
+    return res.status(500).send("Server error");
+  }
+};
+
+export const editInternshipHandler = async (
+  req: AuthRequest<InternsipParams, EditInternshipBody>,
+  res: Response,
+) => {
+  try {
+    const userId = req.user?.id;
+    const { internshipId } = req.params;
+
+    if (!userId) return res.status(401).send("User not found");
+
+    const internship = await editInternship(
+      Number(internshipId),
+      userId,
+      req.body,
+    );
+
+    return res.status(200).send(internship);
+  } catch (error) {
+    console.error("Server error - editInternshipHandler", error);
+    return res.status(500).send("Server error");
+  }
+};
+
+export const deleteInternshipHandler = async (
+  req: AuthRequest2<InternsipParams>,
+  res: Response,
+) => {
+  try {
+    const userId = req.user?.id;
+    const { internshipId } = req.params;
+
+    if (!userId) return res.status(401).send("User not found");
+
+    await deleteInternship(Number(internshipId));
+
+    return res.status(200);
+  } catch (error) {
+    console.error("Server error - deleteInternshipHandler", error);
     return res.status(500).send("Server error");
   }
 };
