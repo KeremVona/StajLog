@@ -22,3 +22,8 @@ export interface EditInternshipBody {
 export interface InternsipParams {
   id: string;
 }
+
+export interface EditInternshipThunkArgs {
+  id: number;
+  data: EditInternshipBody;
+}
