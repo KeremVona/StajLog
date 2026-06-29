@@ -4,6 +4,7 @@ import type {
   AuthRequest2,
   EditInternshipBody,
   InternsipParams,
+  MakeInternshipBody,
 } from "#/interfaces/internship/Internship.js";
 import {
   deleteInternship,
@@ -12,7 +13,7 @@ import {
   getInternships,
   makeInternship,
 } from "#/services/internship/internshipService.js";
-import { type Request, type Response } from "express";
+import { type Request, type RequestHandler, type Response } from "express";
 
 export const getInternshipsHandler = async (req: Request, res: Response) => {
   try {
@@ -25,13 +26,13 @@ export const getInternshipsHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getInternshipHandler = async (
-  req: Request<InternsipParams>,
-  res: Response,
+export const getInternshipHandler: RequestHandler<{ id: string }> = async (
+  req,
+  res,
 ) => {
   try {
-    const { internshipId } = req.params;
-    const internship = await getInternshipById(internshipId);
+    const { id } = req.params;
+    const internship = await getInternshipById(Number(id));
 
     return internship;
   } catch (error) {
@@ -40,10 +41,11 @@ export const getInternshipHandler = async (
   }
 };
 
-export const makeInternshipHandler = async (
-  req: Request<AuthInternshipRequest>,
-  res: Response,
-) => {
+export const makeInternshipHandler: RequestHandler<
+  {},
+  any,
+  MakeInternshipBody
+> = async (req, res) => {
   try {
     const userId = req.user?.id;
 
@@ -58,21 +60,18 @@ export const makeInternshipHandler = async (
   }
 };
 
-export const editInternshipHandler = async (
-  req: AuthRequest<InternsipParams, EditInternshipBody>,
-  res: Response,
-) => {
+export const editInternshipHandler: RequestHandler<
+  InternsipParams,
+  any,
+  EditInternshipBody
+> = async (req, res) => {
   try {
     const userId = req.user?.id;
-    const { internshipId } = req.params;
+    const { id } = req.params;
 
     if (!userId) return res.status(401).send("User not found");
 
-    const internship = await editInternship(
-      Number(internshipId),
-      userId,
-      req.body,
-    );
+    const internship = await editInternship(Number(id), userId, req.body);
 
     return res.status(200).send(internship);
   } catch (error) {
@@ -81,17 +80,17 @@ export const editInternshipHandler = async (
   }
 };
 
-export const deleteInternshipHandler = async (
-  req: AuthRequest2<InternsipParams>,
-  res: Response,
+export const deleteInternshipHandler: RequestHandler<{ id: string }> = async (
+  req,
+  res,
 ) => {
   try {
     const userId = req.user?.id;
-    const { internshipId } = req.params;
+    const { id } = req.params;
 
     if (!userId) return res.status(401).send("User not found");
 
-    await deleteInternship(Number(internshipId));
+    await deleteInternship(Number(id));
 
     return res.status(200);
   } catch (error) {

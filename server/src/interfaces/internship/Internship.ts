@@ -22,7 +22,7 @@ export interface EditInternshipBody {
 }
 
 export interface InternsipParams {
-  internshipId: number;
+  id: string;
 }
 
 export interface AuthInternshipRequest extends Request<
