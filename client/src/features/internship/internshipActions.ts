@@ -2,13 +2,14 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type {
   EditInternshipThunkArgs,
+  InternshipData,
   MakeInternshipBody,
 } from "../../interfaces/internship/Internship";
 
 const backendURL = "http://localhost:5000";
 
 export const getInternships = createAsyncThunk<
-  any,
+  InternshipData[],
   any,
   { rejectValue: string }
 >("internship/", async ({}, { rejectWithValue }) => {
@@ -30,7 +31,7 @@ export const getInternships = createAsyncThunk<
 });
 
 export const getInternshipById = createAsyncThunk<
-  any,
+  InternshipData,
   { internshipId: number },
   { rejectValue: string }
 >("internship/:id", async ({ internshipId }, { rejectWithValue }) => {
