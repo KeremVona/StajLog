@@ -13,8 +13,12 @@ import {
 import { type RequestHandler } from "express";
 
 export const getInternshipsHandler: RequestHandler = async (req, res) => {
+  console.log("start");
   try {
     const userId = req.user?.id;
+
+    console.log("userId:", userId);
+    console.log("user", req.user);
 
     if (!userId) {
       res.status(401).send("Unauthorized");

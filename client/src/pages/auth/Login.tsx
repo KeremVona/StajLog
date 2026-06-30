@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import useFormData from "../../hooks/useFormData";
-import { useEffect } from "react";
 import { loginUser } from "../../features/auth/authActions";
+import useFormData from "../../hooks/useFormData";
 
 const Login = () => {
   const { formData, handleInputChange } = useFormData({
@@ -28,6 +27,7 @@ const Login = () => {
     } catch (err) {
       // Error handling is already done by Redux state,
       // just leave the alert effect for the 'error' state
+      if (error) alert("Error occured");
     }
   };
   //  useEffect(() => {

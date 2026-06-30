@@ -4,6 +4,8 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import Internships from "./pages/Internships";
+import InternshipDetail from "./pages/InternshipDetail";
 
 function App() {
   return (
@@ -18,6 +20,14 @@ function App() {
           <Route
             path="/home"
             element={<ProtectedRoute content={<Dashboard />} />}
+          />
+          <Route
+            path="/internships"
+            element={<ProtectedRoute content={<Internships />} />}
+          />
+          <Route
+            path="/internships/:id"
+            element={<ProtectedRoute content={<InternshipDetail />} />}
           />
         </Routes>
       </BrowserRouter>

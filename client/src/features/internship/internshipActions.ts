@@ -10,13 +10,17 @@ const backendURL = "http://localhost:5000";
 
 export const getInternships = createAsyncThunk<
   InternshipData[],
-  any,
+  void,
   { rejectValue: string }
->("internship/", async ({}, { rejectWithValue }) => {
+>("internship/get", async (_, { rejectWithValue }) => {
   try {
+    const token = localStorage.getItem("token");
+    let parsedToken;
+    if (token) parsedToken = JSON.parse(token);
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${parsedToken.jwtToken}`,
       },
     };
     const response = await axios.get(`${backendURL}/api/internship/`, config);
@@ -34,7 +38,7 @@ export const getInternshipById = createAsyncThunk<
   InternshipData,
   { internshipId: number },
   { rejectValue: string }
->("internship/:id", async ({ internshipId }, { rejectWithValue }) => {
+>("internship/get/:id", async ({ internshipId }, { rejectWithValue }) => {
   try {
     const config = {
       headers: {
@@ -60,7 +64,7 @@ export const makeInternship = createAsyncThunk<
   any,
   MakeInternshipBody,
   { rejectValue: string }
->("internship/", async (internshipData, { rejectWithValue }) => {
+>("internship/make", async (internshipData, { rejectWithValue }) => {
   try {
     const config = {
       headers: {
@@ -87,7 +91,7 @@ export const editInternship = createAsyncThunk<
   any,
   EditInternshipThunkArgs,
   { rejectValue: string }
->("internship/:id", async ({ id, data }, { rejectWithValue }) => {
+>("internship/edit/:id", async ({ id, data }, { rejectWithValue }) => {
   try {
     const config = {
       headers: {
@@ -113,7 +117,7 @@ export const deleteInternship = createAsyncThunk<
   any,
   { internshipId: number },
   { rejectValue: string }
->("internship/:id", async (internshipId, { rejectWithValue }) => {
+>("internship/delete/:id", async (internshipId, { rejectWithValue }) => {
   try {
     const config = {
       headers: {
