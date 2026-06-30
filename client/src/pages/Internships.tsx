@@ -1,31 +1,23 @@
-import Sidebar from "../components/layout/Sidebar";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { useEffect, useState } from "react";
+import Sidebar from "../components/layout/Sidebar";
 import { getInternships } from "../features/internship/internshipActions";
-import type { InternshipData } from "../interfaces/internship/Internship";
 
 const Internships = () => {
   const { loading, success, error, internshipInfo } = useAppSelector(
     (state) => state.internship,
   );
 
-  const [internships, setInternships] = useState<InternshipData[]>([]);
-
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const fetchInternships = async () => {
-      try {
-        const data = await dispatch(getInternships()).unwrap();
-        setInternships(data);
-      } catch (error) {
-        alert("Error occured" + error);
-      }
-    };
-    fetchInternships();
-  }, []);
+    if (internshipInfo.length === 0) {
+      dispatch(getInternships());
+    }
+  }, [dispatch, internshipInfo.length]);
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
   return (
     <div className="flex h-screen bg-zinc-50 font-sans text-zinc-900">
       {/* Sidebar Navigation */}
@@ -67,7 +59,7 @@ const Internships = () => {
           {/* Internships Grid */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
             {/* Card 1: Active Internship */}
-            {internships.map((internship) => (
+            {internshipInfo.map((internship) => (
               <div key={internship.id}>
                 <a
                   href={`/internships/${internship.id}`}

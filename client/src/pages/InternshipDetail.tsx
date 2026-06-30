@@ -1,6 +1,8 @@
 import Sidebar from "../components/layout/Sidebar";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 
 const InternshipDetail = () => {
+  const { loading } = useAppSelector((state) => state.internship);
   return (
     <div className="flex h-screen bg-zinc-50 font-sans text-zinc-900">
       {/* Sidebar Navigation (Maintained for consistency) */}
