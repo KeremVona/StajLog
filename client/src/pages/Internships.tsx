@@ -4,7 +4,7 @@ import Sidebar from "../components/layout/Sidebar";
 import { getInternships } from "../features/internship/internshipActions";
 
 const Internships = () => {
-  const { loading, success, error, internshipInfo } = useAppSelector(
+  const { loading, error, internshipInfo } = useAppSelector(
     (state) => state.internship,
   );
 

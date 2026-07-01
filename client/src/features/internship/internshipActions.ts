@@ -40,9 +40,13 @@ export const getInternshipById = createAsyncThunk<
   { rejectValue: string }
 >("internship/get/:id", async ({ internshipId }, { rejectWithValue }) => {
   try {
+    const token = localStorage.getItem("token");
+    let parsedToken;
+    if (token) parsedToken = JSON.parse(token);
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${parsedToken.jwtToken}`,
       },
     };
     const response = await axios.get(
@@ -66,9 +70,13 @@ export const makeInternship = createAsyncThunk<
   { rejectValue: string }
 >("internship/make", async (internshipData, { rejectWithValue }) => {
   try {
+    const token = localStorage.getItem("token");
+    let parsedToken;
+    if (token) parsedToken = JSON.parse(token);
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${parsedToken.jwtToken}`,
       },
     };
     const response = await axios.post(
@@ -93,9 +101,13 @@ export const editInternship = createAsyncThunk<
   { rejectValue: string }
 >("internship/edit/:id", async ({ id, data }, { rejectWithValue }) => {
   try {
+    const token = localStorage.getItem("token");
+    let parsedToken;
+    if (token) parsedToken = JSON.parse(token);
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${parsedToken.jwtToken}`,
       },
     };
     const response = await axios.put(
@@ -119,9 +131,13 @@ export const deleteInternship = createAsyncThunk<
   { rejectValue: string }
 >("internship/delete/:id", async (internshipId, { rejectWithValue }) => {
   try {
+    const token = localStorage.getItem("token");
+    let parsedToken;
+    if (token) parsedToken = JSON.parse(token);
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${parsedToken.jwtToken}`,
       },
     };
     const response = await axios.delete(

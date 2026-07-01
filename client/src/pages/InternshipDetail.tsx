@@ -1,8 +1,28 @@
-import Sidebar from "../components/layout/Sidebar";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import Sidebar from "../components/layout/Sidebar";
+import { getInternshipById } from "../features/internship/internshipActions";
+import { useParams } from "react-router";
 
 const InternshipDetail = () => {
-  const { loading } = useAppSelector((state) => state.internship);
+  const { loading, error, internshipInfo } = useAppSelector(
+    (state) => state.internship,
+  );
+  const dispatch = useAppDispatch();
+
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (internshipInfo.length === 0) {
+      dispatch(getInternshipById({ internshipId: Number(id) }));
+    }
+  }, [dispatch, internshipInfo.length]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!internshipInfo || internshipInfo.length === 0) {
+    return <div>No internship details found.</div>;
+  }
   return (
     <div className="flex h-screen bg-zinc-50 font-sans text-zinc-900">
       {/* Sidebar Navigation (Maintained for consistency) */}
@@ -33,13 +53,15 @@ const InternshipDetail = () => {
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-              <span className="text-zinc-900">Company 1</span>
+              <span className="text-zinc-900">
+                {internshipInfo[0].companyName}
+              </span>
             </nav>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-                  Company 1
+                  {internshipInfo[0].companyName}
                 </h1>
                 <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 mt-1">
                   In Progress
@@ -186,7 +208,7 @@ const InternshipDetail = () => {
                       Sector
                     </dt>
                     <dd className="mt-1 text-sm text-zinc-900">
-                      Software Engineering
+                      {internshipInfo[0].companySector}
                     </dd>
                   </div>
                   <div>
@@ -194,7 +216,10 @@ const InternshipDetail = () => {
                       Duration
                     </dt>
                     <dd className="mt-1 text-sm text-zinc-900">
-                      June 15, 2026 - July 26, 2026
+                      {new Date(internshipInfo[0].startDate).toLocaleString()} -
+                      {new Date(
+                        internshipInfo[0].endDate,
+                      ).toLocaleString()}{" "}
                     </dd>
                   </div>
                   <div className="pt-4 border-t border-zinc-100">
