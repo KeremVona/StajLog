@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Internships from "./pages/Internships";
 import InternshipDetail from "./pages/InternshipDetail";
+import MakeInternship from "./pages/MakeInternship";
 
 function App() {
   return (
@@ -29,6 +30,11 @@ function App() {
             path="/internships/:id"
             element={<ProtectedRoute content={<InternshipDetail />} />}
           />
+          <Route
+            path="/make-internship"
+            element={<ProtectedRoute content={<MakeInternship />} />}
+          />
+
         </Routes>
       </BrowserRouter>
     </>
