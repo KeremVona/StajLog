@@ -1,6 +1,41 @@
 import Sidebar from "../components/layout/Sidebar"
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { makeInternship } from "../features/internship/internshipActions";
+import useFormData from "../hooks/useFormData";
 
 const MakeInternship = () => {
+  const { formData, handleInputChange } = useFormData({
+    userId: 0,
+    companyName: "",
+    companySector: "",
+    companyAddress: "",
+    companyPhone: "",
+    companyWebAddress: "",
+    startDate: new Date,
+    endDate: new Date,
+  });
+  const { loading, error } = useAppSelector((state) => state.internship);
+
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    const payload = {
+      ...formData,
+      startDate: new Date(formData.startDate),
+      endDate: new Date(formData.endDate),
+    };
+
+    try {
+      await dispatch(makeInternship(payload)).unwrap();
+    } catch (error) {
+      alert("Error occured");
+    }
+  }
+
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error...</div>
   return (
     <div className="flex h-screen bg-zinc-50 font-sans text-zinc-900">
       {/* Sidebar Navigation (Maintained for consistency) */}
@@ -28,7 +63,7 @@ const MakeInternship = () => {
 
           {/* Form Card */}
           <div className="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden">
-            <form className="divide-y divide-zinc-200">
+            <form onSubmit={handleSubmit} className="divide-y divide-zinc-200">
 
               {/* Section 1: Company Details */}
               <div className="p-6 sm:p-8 space-y-6">
@@ -46,8 +81,9 @@ const MakeInternship = () => {
                     </label>
                     <input
                       type="text"
-                      name="company_name"
+                      name="companyName"
                       id="company_name"
+                      onChange={handleInputChange}
                       required
                       placeholder="e.g. Company"
                       className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
@@ -61,8 +97,9 @@ const MakeInternship = () => {
                     </label>
                     <input
                       type="text"
-                      name="sector"
+                      name="companySector"
                       id="sector"
+                      onChange={handleInputChange}
                       required
                       placeholder="e.g. Software Engineering"
                       className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
@@ -76,8 +113,9 @@ const MakeInternship = () => {
                     </label>
                     <input
                       type="tel"
-                      name="company_phone"
+                      name="companyPhone"
                       id="company_phone"
+                      onChange={handleInputChange}
                       placeholder="+90 216 000 00 00"
                       className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
                     />
@@ -94,8 +132,9 @@ const MakeInternship = () => {
                       </span>
                       <input
                         type="text"
-                        name="web_address"
+                        name="companyWebAddress"
                         id="web_address"
+                        onChange={handleInputChange}
                         placeholder="www.company.com"
                         className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
                       />
@@ -107,10 +146,10 @@ const MakeInternship = () => {
                     <label htmlFor="company_address" className="block text-sm font-medium text-zinc-700 mb-1">
                       Full Address
                     </label>
-                    <textarea
+                    <input
                       id="company_address"
-                      name="company_address"
-                      rows={3}
+                      name="companyAddress"
+                      onChange={handleInputChange}
                       required
                       placeholder="Address"
                       className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
@@ -134,8 +173,9 @@ const MakeInternship = () => {
                     </label>
                     <input
                       type="date"
-                      name="start_date"
+                      name="startDate"
                       id="start_date"
+                      onChange={handleInputChange}
                       required
                       className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
                     />
@@ -148,8 +188,9 @@ const MakeInternship = () => {
                     </label>
                     <input
                       type="date"
-                      name="end_date"
+                      name="endDate"
                       id="end_date"
+                      onChange={handleInputChange}
                       required
                       className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
                     />
