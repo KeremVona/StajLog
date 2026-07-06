@@ -2,6 +2,8 @@ import Sidebar from "../components/layout/Sidebar"
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { makeInternship } from "../features/internship/internshipActions";
 import useFormData from "../hooks/useFormData";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MakeInternship = () => {
   const { formData, handleInputChange } = useFormData({
@@ -14,9 +16,11 @@ const MakeInternship = () => {
     startDate: new Date,
     endDate: new Date,
   });
-  const { loading, error } = useAppSelector((state) => state.internship);
+  const { loading, error, success } = useAppSelector((state) => state.internship);
 
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -33,6 +37,14 @@ const MakeInternship = () => {
       alert("Error occured");
     }
   }
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        navigate("/internships")
+      }, 400);
+    }
+  }, [success])
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error...</div>
