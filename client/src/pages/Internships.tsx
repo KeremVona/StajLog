@@ -18,6 +18,7 @@ const Internships = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  if (internshipInfo.length === 0) return <div>There is no internships</div>
   return (
     <div className="flex h-screen bg-zinc-50 font-sans text-zinc-900">
       {/* Sidebar Navigation */}
@@ -37,7 +38,7 @@ const Internships = () => {
               </p>
             </div>
             <div>
-              <button className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <a href="/make-internship" className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 <svg
                   className="-ml-1 mr-2 h-4 w-4"
                   fill="none"
@@ -52,7 +53,7 @@ const Internships = () => {
                   />
                 </svg>
                 New Internship
-              </button>
+              </a>
             </div>
           </div>
 
