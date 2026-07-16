@@ -1,6 +1,6 @@
 export enum LogStatus {
   DRAFT = "DRAFT",
-  COMPLETED = "COMPLETED"
+  COMPLETED = "COMPLETED",
 }
 
 export interface MakeLogBody {
@@ -8,4 +8,8 @@ export interface MakeLogBody {
   logDate: Date | string;
   content: string;
   status?: LogStatus;
+}
+
+export interface LogParams {
+  id: string;
 }
