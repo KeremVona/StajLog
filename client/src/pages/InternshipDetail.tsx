@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Sidebar from "../components/layout/Sidebar";
 import { getInternshipById } from "../features/internship/internshipActions";
 import { useParams } from "react-router";
+import Logs from "../components/log/Logs";
 
 const InternshipDetail = () => {
   const { loading, error, internshipInfo } = useAppSelector(
@@ -122,77 +123,7 @@ const InternshipDetail = () => {
               </div>
 
               {/* Log Entries List */}
-              <div className="space-y-4">
-                <h2 className="text-base font-semibold text-zinc-900">
-                  Daily Logs
-                </h2>
-
-                {/* Active / Draft Log */}
-                <div className="rounded-xl border border-indigo-200 bg-indigo-50/30 p-4 shadow-sm relative overflow-hidden group cursor-pointer hover:border-indigo-300 transition-colors">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500"></div>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-semibold text-zinc-900">
-                      Day 15 Log
-                    </h3>
-                    <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">
-                      Draft in progress
-                    </span>
-                  </div>
-                  <p className="text-sm text-zinc-600 line-clamp-2">
-                    Started configuring the React frontend components to connect
-                    with the new ASP.NET Core endpoints...
-                  </p>
-                  <div className="mt-3 flex items-center gap-2">
-                    <button className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                      Continue writing &rarr;
-                    </button>
-                  </div>
-                </div>
-
-                {/* Completed & Improved Log */}
-                <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm group cursor-pointer hover:border-zinc-300 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-zinc-900">
-                      Day 14 Log
-                    </h3>
-                    <div className="flex gap-2">
-                      <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
-                        <svg
-                          className="mr-1 h-3 w-3"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M12 2L15 9H22L16.5 14L18 21L12 17L6 21L7.5 14L2 9H9L12 2Z" />
-                        </svg>
-                        AI Improved
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-zinc-500 line-clamp-2">
-                    Successfully implemented the RESTful API architecture for
-                    the real estate property fetch module. Handled database
-                    migrations and ensured proper data typing across the C#
-                    backend.
-                  </p>
-                </div>
-
-                {/* Standard Completed Log */}
-                <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm group cursor-pointer hover:border-zinc-300 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-medium text-zinc-900">
-                      Day 13 Log
-                    </h3>
-                    <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                      Completed
-                    </span>
-                  </div>
-                  <p className="text-sm text-zinc-500 line-clamp-2">
-                    Attended the morning standup. Planned out the database
-                    schema for the user authentication flow and discussed
-                    security requirements with the senior engineering team.
-                  </p>
-                </div>
-              </div>
+              <Logs />
             </div>
 
             {/* Right Column: Metadata & Documents (Part 2) */}

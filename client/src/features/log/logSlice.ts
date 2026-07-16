@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { LogState } from "../../interfaces/log/Log";
-import { editLog, getLogById, getLogs, makeLog } from "./logActions";
+import { deleteLog, editLog, getLogById, getLogs, makeLog } from "./logActions";
 
 const initialState: LogState = {
   loading: false,
@@ -75,15 +75,15 @@ const logSlice = createSlice({
       })
 
       // Delete log
-      .addCase(editLog.pending, (state) => {
+      .addCase(deleteLog.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(editLog.fulfilled, (state) => {
+      .addCase(deleteLog.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
       })
-      .addCase(editLog.rejected, (state, action) => {
+      .addCase(deleteLog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Something went wrong";
       });
