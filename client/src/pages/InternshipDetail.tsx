@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Sidebar from "../components/layout/Sidebar";
 import { getInternshipById } from "../features/internship/internshipActions";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import Logs from "../components/log/Logs";
 
 const InternshipDetail = () => {
@@ -12,6 +12,7 @@ const InternshipDetail = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<{ id: string }>();
+  const numberId = Number(id);
 
   useEffect(() => {
     if (internshipInfo.length === 0) {
@@ -55,14 +56,14 @@ const InternshipDetail = () => {
                 />
               </svg>
               <span className="text-zinc-900">
-                {internshipInfo[0].companyName}
+                {internshipInfo[numberId - 1].companyName}
               </span>
             </nav>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-                  {internshipInfo[0].companyName}
+                  {internshipInfo[numberId - 1].companyName}
                 </h1>
                 <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 mt-1">
                   In Progress
@@ -72,7 +73,10 @@ const InternshipDetail = () => {
                 <button className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm border border-zinc-200 hover:bg-zinc-50 transition-colors">
                   Edit Details
                 </button>
-                <button className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors">
+                <Link
+                  to={`/internship/${numberId}/make-log`}
+                  className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors"
+                >
                   <svg
                     className="-ml-1 mr-2 h-4 w-4"
                     fill="none"
@@ -87,7 +91,7 @@ const InternshipDetail = () => {
                     />
                   </svg>
                   New Log Entry
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -139,7 +143,7 @@ const InternshipDetail = () => {
                       Sector
                     </dt>
                     <dd className="mt-1 text-sm text-zinc-900">
-                      {internshipInfo[0].companySector}
+                      {internshipInfo[numberId - 1].companySector}
                     </dd>
                   </div>
                   <div>
@@ -147,9 +151,12 @@ const InternshipDetail = () => {
                       Duration
                     </dt>
                     <dd className="mt-1 text-sm text-zinc-900">
-                      {new Date(internshipInfo[0].startDate).toLocaleString()} -
                       {new Date(
-                        internshipInfo[0].endDate,
+                        internshipInfo[numberId - 1].startDate,
+                      ).toLocaleString()}{" "}
+                      -
+                      {new Date(
+                        internshipInfo[numberId - 1].endDate,
                       ).toLocaleString()}{" "}
                     </dd>
                   </div>
