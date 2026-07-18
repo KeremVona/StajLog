@@ -13,11 +13,11 @@ const ProtectedRoute = ({ content }: ProtectedRouteProps) => {
     return <Navigate to="/login" replace />;
   }
 
-  const isExpired = isTokenExpired(token);
+  // const isExpired = isTokenExpired(token);
 
-  if (isExpired) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (isExpired) {
+  //   return <Navigate to="/login" replace />;
+  // }
 
   return content;
 };

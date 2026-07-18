@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Sidebar from "../components/layout/Sidebar";
 import { getInternshipById } from "../features/internship/internshipActions";
-import { Link, useParams } from "react-router";
+import { Link, useParams } from "react-router-dom";
 import Logs from "../components/log/Logs";
 
 const InternshipDetail = () => {
@@ -56,14 +56,14 @@ const InternshipDetail = () => {
                 />
               </svg>
               <span className="text-zinc-900">
-                {internshipInfo[numberId - 1].companyName}
+                {internshipInfo[0].companyName}
               </span>
             </nav>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
-                  {internshipInfo[numberId - 1].companyName}
+                  {internshipInfo[0].companyName}
                 </h1>
                 <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 mt-1">
                   In Progress
@@ -74,7 +74,7 @@ const InternshipDetail = () => {
                   Edit Details
                 </button>
                 <Link
-                  to={`/internship/${numberId}/make-log`}
+                  to={`/internships/${numberId}/make-log`}
                   className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors"
                 >
                   <svg
@@ -143,7 +143,7 @@ const InternshipDetail = () => {
                       Sector
                     </dt>
                     <dd className="mt-1 text-sm text-zinc-900">
-                      {internshipInfo[numberId - 1].companySector}
+                      {internshipInfo[0].companySector}
                     </dd>
                   </div>
                   <div>
@@ -151,12 +151,9 @@ const InternshipDetail = () => {
                       Duration
                     </dt>
                     <dd className="mt-1 text-sm text-zinc-900">
+                      {new Date(internshipInfo[0].startDate).toLocaleString()} -
                       {new Date(
-                        internshipInfo[numberId - 1].startDate,
-                      ).toLocaleString()}{" "}
-                      -
-                      {new Date(
-                        internshipInfo[numberId - 1].endDate,
+                        internshipInfo[0].endDate,
                       ).toLocaleString()}{" "}
                     </dd>
                   </div>
