@@ -1,9 +1,10 @@
 import { useEffect, type SyntheticEvent } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import useFormData from "../hooks/useFormData";
 import { getLogs, makeLog } from "../features/log/logActions";
 import { LogStatus } from "../interfaces/log/Log";
+import { getInternshipById } from "../features/internship/internshipActions";
 
 const MakeLog = () => {
   const { formData, handleInputChange } = useFormData({
@@ -11,29 +12,37 @@ const MakeLog = () => {
     logDate: new Date().getDate(),
     content: "",
     status: LogStatus.DRAFT,
-    startDate: new Date(),
-    endDate: new Date(),
   });
 
   const { loading, error, logInfo } = useAppSelector((state) => state.log);
 
   const dispatch = useAppDispatch();
 
+  const { id } = useParams<{ id: string }>();
+  const numberId = Number(id);
+
+  const { internshipInfo } = useAppSelector((state) => state.internship);
+
+  useEffect(() => {
+    if (!internshipInfo) {
+      dispatch(getInternshipById({ internshipId: numberId }));
+    }
+  }, [dispatch, numberId, internshipInfo]);
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     const payload = {
       ...formData,
+      internshipId: numberId,
       logDate: new Date(formData.logDate),
-      startDate: new Date(formData.startDate),
-      endDate: new Date(formData.endDate),
     };
 
     dispatch(makeLog(payload)).unwrap();
 
     setTimeout(() => {
       console.log("Sending you back...");
-      <Navigate to="/internships/1" />;
+      <Navigate to={`/internships/${numberId}`} />;
     }, 800);
   };
 
@@ -163,7 +172,7 @@ const MakeLog = () => {
                 href="/internships/1"
                 className="hover:text-zinc-900 transition-colors"
               >
-                OBSS
+                {internshipInfo[0].companyName}
               </a>
               <svg
                 className="mx-2 h-4 w-4 text-zinc-400"
@@ -199,9 +208,11 @@ const MakeLog = () => {
             {/* Writing Area */}
             <div className="flex-1 p-8">
               <textarea
+                value={formData.content}
+                name="content"
+                onChange={handleInputChange}
                 placeholder="What did you work on today? Don't worry about perfect grammar, the AI will help you polish it..."
                 className="w-full h-full min-h-[400px] resize-none border-none p-0 text-base leading-relaxed text-zinc-800 placeholder-zinc-400 focus:ring-0 bg-transparent outline-none"
-                defaultValue=""
               />
             </div>
 
