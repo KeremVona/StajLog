@@ -8,6 +8,7 @@ import Internships from "./pages/Internships";
 import InternshipDetail from "./pages/InternshipDetail";
 import MakeInternship from "./pages/MakeInternship";
 import MakeLog from "./pages/MakeLog";
+import LogDetail from "./pages/LogDetail";
 
 function App() {
   return (
@@ -34,6 +35,11 @@ function App() {
           <Route
             path="/make-internship"
             element={<ProtectedRoute content={<MakeInternship />} />}
+          />
+
+          <Route
+            path="/internships/:id/log/:logId"
+            element={<ProtectedRoute content={<LogDetail />} />}
           />
           <Route
             path="/internships/:id/make-log"

@@ -138,7 +138,7 @@ export const deleteLog = createAsyncThunk<
       },
     };
     const response = await axios.delete(
-      `${backendURL}/api/log/${logId}`,
+      `${backendURL}/api/log/${logId.logId}`,
       config,
     );
     return response.data;

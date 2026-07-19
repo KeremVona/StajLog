@@ -1,13 +1,14 @@
-import { useEffect, type SyntheticEvent } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import type { SyntheticEvent } from "react";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Sidebar from "../components/layout/Sidebar";
 import { getInternshipById } from "../features/internship/internshipActions";
-import { getLogs, makeLog } from "../features/log/logActions";
+import { deleteLog, editLog, getLogs } from "../features/log/logActions";
 import useFormData from "../hooks/useFormData";
 import { LogStatus } from "../interfaces/log/Log";
 
-const MakeLog = () => {
+const LogDetail = () => {
   const { formData, handleInputChange } = useFormData({
     internshipId: 0,
     logDate: new Date().toISOString(),
@@ -22,7 +23,9 @@ const MakeLog = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<{ id: string }>();
+  const { logId } = useParams<{ logId: string }>();
   const numberId = Number(id);
+  const numberLogId = Number(logId);
 
   const { internshipInfo } = useAppSelector((state) => state.internship);
 
@@ -41,10 +44,13 @@ const MakeLog = () => {
       logDate: formData.logDate,
     };
 
-    dispatch(makeLog(payload)).unwrap();
+    dispatch(editLog({ id: numberId, data: payload })).unwrap();
+  };
 
+  const handleDelete = () => {
+    dispatch(deleteLog({ logId: numberLogId }));
+    console.log("Sending you back...");
     setTimeout(() => {
-      console.log("Sending you back...");
       navigate(`/internships/${numberId}`);
     }, 800);
   };
@@ -171,6 +177,7 @@ const MakeLog = () => {
           <div className="flex items-center justify-between pt-2">
             <button
               type="button"
+              onClick={handleDelete}
               className="text-sm font-medium text-zinc-500 hover:text-rose-600 transition-colors"
             >
               Delete Log
@@ -210,4 +217,4 @@ const MakeLog = () => {
   );
 };
 
-export default MakeLog;
+export default LogDetail;

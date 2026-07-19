@@ -140,7 +140,10 @@ const InternshipDetail = () => {
               </div>
 
               {/* Log Entries List */}
-              <Logs />
+              <Logs
+                internshipStartDate={internshipInfo[0].startDate}
+                id={internshipInfo[0].id}
+              />
             </div>
 
             {/* Right Column: Metadata & Documents (Part 2) */}
