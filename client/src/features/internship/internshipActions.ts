@@ -141,7 +141,7 @@ export const deleteInternship = createAsyncThunk<
       },
     };
     const response = await axios.delete(
-      `${backendURL}/api/internship/${internshipId}`,
+      `${backendURL}/api/internship/${internshipId.internshipId}`,
       config,
     );
     return response.data;

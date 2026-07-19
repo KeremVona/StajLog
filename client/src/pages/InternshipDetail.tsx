@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Sidebar from "../components/layout/Sidebar";
-import { getInternshipById } from "../features/internship/internshipActions";
+import {
+  deleteInternship,
+  getInternshipById,
+} from "../features/internship/internshipActions";
 import { Link, useParams } from "react-router-dom";
 import Logs from "../components/log/Logs";
 
@@ -70,6 +73,16 @@ const InternshipDetail = () => {
                 </span>
               </div>
               <div className="flex gap-3">
+                <button
+                  onClick={() =>
+                    dispatch(
+                      deleteInternship({ internshipId: numberId }),
+                    ).unwrap()
+                  }
+                  className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-red-700 shadow-sm border border-zinc-200 hover:bg-zinc-50 transition-colors"
+                >
+                  Delete Internship
+                </button>
                 <button className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm border border-zinc-200 hover:bg-zinc-50 transition-colors">
                   Edit Details
                 </button>
@@ -161,14 +174,16 @@ const InternshipDetail = () => {
                     <dt className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
                       Address
                     </dt>
-                    <dd className="mt-1 text-sm text-zinc-900">Teknopark</dd>
+                    <dd className="mt-1 text-sm text-zinc-900">
+                      {internshipInfo[0].companyAddress}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
                       Website
                     </dt>
                     <dd className="mt-1 text-sm text-indigo-600 hover:underline cursor-pointer">
-                      website
+                      {internshipInfo[0].companyWebAddress}
                     </dd>
                   </div>
                 </dl>
