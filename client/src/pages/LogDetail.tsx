@@ -126,7 +126,7 @@ const LogDetail = () => {
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-              <span className="text-zinc-900">New Log</span>
+              <span className="text-zinc-900">Day x Log</span>
             </nav>
 
             <div className="flex items-start justify-between">
@@ -137,7 +137,7 @@ const LogDetail = () => {
                 <p className="mt-1 text-sm text-zinc-500">July 3, 2026</p>
               </div>
               <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">
-                Draft
+                {logInfo?.[0]?.status}
               </span>
             </div>
           </div>
