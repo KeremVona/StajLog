@@ -7,6 +7,8 @@ export interface MakeLogBody {
   internshipId: number;
   logDate: Date | string;
   content: string;
+  improvedContent: string;
+  isImproved: boolean;
   status?: LogStatus;
 }
 

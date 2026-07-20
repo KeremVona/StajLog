@@ -6,6 +6,7 @@ import {
   makeLog,
   updateLog,
 } from "#/services/log/logService.js";
+import { improveLogContent } from "#/utils/improveLog.js";
 import { type RequestHandler } from "express";
 
 export const getLogsHandler: RequestHandler = async (req, res) => {
@@ -101,6 +102,38 @@ export const deleteLogHandler: RequestHandler<{ id: string }> = async (
     return res.status(200).send("Deletion successful");
   } catch (error) {
     console.error("Server error - deleteLogHandler", error);
+    return res.status(500).send("Server error");
+  }
+};
+
+export const improveLogHandler: RequestHandler<
+  {
+    id: string;
+  },
+  any,
+  MakeLogBody
+> = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const { id } = req.params;
+    const { content } = req.body;
+
+    if (!userId) return res.status(401).send("User not found");
+    if (!content)
+      return res.status(400).send("Content is required to improve.");
+
+    const improvedLog = await improveLogContent(content);
+
+    const updatePayload: Partial<MakeLogBody> = {
+      improvedContent: improvedLog,
+      isImproved: true,
+    };
+
+    const updatedLog = await updateLog(Number(id), updatePayload);
+
+    return res.status(200).send(updatedLog);
+  } catch (error) {
+    console.error("Server error - improveLogHandler", error);
     return res.status(500).send("Server error");
   }
 };

@@ -17,9 +17,7 @@ export const getLogs = async () => {
   }
 };
 
-export const getLogById = async (
-  logId: number,
-) => {
+export const getLogById = async (logId: number) => {
   try {
     const log = await prisma.internshipLog.findFirst({
       where: { id: logId },
@@ -49,7 +47,9 @@ export const makeLog = async (makeLogBody: MakeLogBody) => {
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2003") {
-        throw new Error("Invalid Internship ID: The associated internship does not exist.");
+        throw new Error(
+          "Invalid Internship ID: The associated internship does not exist.",
+        );
       }
     }
     console.error("Unexpected error making log:", error);
@@ -63,6 +63,14 @@ export const updateLog = async (id: number, data: Partial<MakeLogBody>) => {
 
     if (data.content !== undefined) {
       updatePayload.content = data.content;
+    }
+
+    if (data.improvedContent !== undefined) {
+      updatePayload.improvedContent = data.improvedContent;
+    }
+
+    if (data.isImproved !== undefined) {
+      updatePayload.isImproved = data.isImproved;
     }
 
     if (data.status !== undefined) {
@@ -80,7 +88,10 @@ export const updateLog = async (id: number, data: Partial<MakeLogBody>) => {
 
     return updatedLog;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       throw new Error("Log not found.");
     }
     throw error;
@@ -94,7 +105,10 @@ export const deleteLog = async (id: number) => {
     });
     return deletedLog;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
       throw new Error("Log not found, it may have already been deleted.");
     }
     throw new Error("Error deleting log.");
