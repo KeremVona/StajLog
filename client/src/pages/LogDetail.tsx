@@ -1,15 +1,20 @@
 import type { SyntheticEvent } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Sidebar from "../components/layout/Sidebar";
 import { getInternshipById } from "../features/internship/internshipActions";
-import { deleteLog, editLog, getLogs } from "../features/log/logActions";
+import {
+  deleteLog,
+  editLog,
+  getLogById,
+  getLogs,
+} from "../features/log/logActions";
 import useFormData from "../hooks/useFormData";
 import { LogStatus } from "../interfaces/log/Log";
 
 const LogDetail = () => {
-  const { formData, handleInputChange } = useFormData({
+  const { formData, handleInputChange, setFormData } = useFormData({
     internshipId: 0,
     logDate: new Date().toISOString(),
     content: "",
@@ -30,10 +35,22 @@ const LogDetail = () => {
   const { internshipInfo } = useAppSelector((state) => state.internship);
 
   useEffect(() => {
-    if (!internshipInfo) {
+    if (!internshipInfo || internshipInfo.length === 0) {
       dispatch(getInternshipById({ internshipId: numberId }));
     }
   }, [dispatch, numberId, internshipInfo]);
+
+  useEffect(() => {
+    if (logInfo && logInfo.length > 0) {
+      const currentLog = logInfo[0];
+      setFormData((prev: any) => ({
+        ...prev,
+        content: currentLog.content || "",
+        logDate: currentLog.logDate || prev.logDate,
+        status: currentLog.status || prev.status,
+      }));
+    }
+  }, [logInfo, setFormData]);
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -44,7 +61,7 @@ const LogDetail = () => {
       logDate: formData.logDate,
     };
 
-    dispatch(editLog({ id: numberId, data: payload })).unwrap();
+    dispatch(editLog({ logId: numberLogId, data: payload })).unwrap();
   };
 
   const handleDelete = () => {
@@ -56,8 +73,8 @@ const LogDetail = () => {
   };
 
   useEffect(() => {
-    dispatch(getLogs());
-  }, [dispatch]);
+    dispatch(getLogById({ logId: numberLogId }));
+  }, [dispatch, numberLogId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
@@ -91,11 +108,11 @@ const LogDetail = () => {
                 />
               </svg>
               <a
-                href={`/internships/${internshipInfo[0].id}`}
+                href={`/internships/${internshipInfo?.[0]?.id}`}
                 className="hover:text-zinc-900 transition-colors"
               >
-                {internshipInfo[0].companyName}
-              </a>
+                {internshipInfo?.[0]?.companyName || "Loading..."}
+              </a>{" "}
               <svg
                 className="mx-2 h-4 w-4 text-zinc-400"
                 fill="none"
@@ -115,7 +132,7 @@ const LogDetail = () => {
             <div className="flex items-start justify-between">
               <div>
                 <h1 className="text-3xl font-semibold tracking-tight text-zinc-900">
-                  Day {logInfo.length + 1} Log
+                  Day x Log
                 </h1>
                 <p className="mt-1 text-sm text-zinc-500">July 3, 2026</p>
               </div>
@@ -188,7 +205,7 @@ const LogDetail = () => {
                 onClick={handleSubmit}
                 className="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-zinc-700 shadow-sm border border-zinc-200 hover:bg-zinc-50 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
-                Save as Draft
+                Update and Save as Draft
               </button>
               <button
                 type="button"

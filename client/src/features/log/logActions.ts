@@ -96,7 +96,7 @@ export const editLog = createAsyncThunk<
   any,
   EditLogThunkArgs,
   { rejectValue: string }
->("log/edit/:id", async ({ id, data }, { rejectWithValue }) => {
+>("log/edit/:id", async ({ logId, data }, { rejectWithValue }) => {
   try {
     const token = localStorage.getItem("token");
     let parsedToken;
@@ -108,7 +108,7 @@ export const editLog = createAsyncThunk<
       },
     };
     const response = await axios.put(
-      `${backendURL}/api/log/${id}`,
+      `${backendURL}/api/log/${logId}`,
       data,
       config,
     );

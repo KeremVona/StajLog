@@ -9,7 +9,7 @@ const useFormData = <T extends Record<string, any>>(initialState: T) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  return { formData, handleInputChange };
+  return { formData, handleInputChange, setFormData };
 };
 
 export default useFormData;

@@ -11,7 +11,7 @@ export interface LogData {
 }
 
 export interface EditLogThunkArgs {
-  id: number;
+  logId: number;
   data: MakeLogBody;
 }
 

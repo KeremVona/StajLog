@@ -5,11 +5,10 @@ import { getLogs } from "../../features/log/logActions";
 import type { LogData } from "../../interfaces/log/Log";
 // Log 1: Worked on HTML home page and added a button to console.log() calculator value.
 interface LogsProps {
-  internshipStartDate: string | Date;
   id: number;
 }
 
-const Logs = ({ internshipStartDate, id }: LogsProps) => {
+const Logs = ({ id }: LogsProps) => {
   const navigate = useNavigate();
 
   const { loading, error, logInfo } = useAppSelector((state) => state.log);
@@ -20,10 +19,23 @@ const Logs = ({ internshipStartDate, id }: LogsProps) => {
     dispatch(getLogs());
   }, []);
 
+  const sortedLogs = [...logInfo].sort((a, b) => {
+    const timeDiff =
+      new Date(a.logDate).getTime() - new Date(b.logDate).getTime();
+
+    // If dates are exactly the same, fallback to sorting by ID
+    // so the order remains consistent even after updates
+    if (timeDiff === 0) {
+      return a.id - b.id;
+    }
+
+    return timeDiff;
+  });
+
   let logs: (LogData & { dayNumber: number })[] = [];
 
-  if (logInfo) {
-    logs = logInfo.map((log, index) => ({
+  if (sortedLogs) {
+    logs = sortedLogs.map((log, index) => ({
       ...log,
       dayNumber: index + 1,
     }));
