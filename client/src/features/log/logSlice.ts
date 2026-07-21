@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { LogState } from "../../interfaces/log/Log";
-import { deleteLog, editLog, getLogById, getLogs, makeLog } from "./logActions";
+import {
+  deleteLog,
+  editLog,
+  getLogById,
+  getLogs,
+  improveLog,
+  makeLog,
+} from "./logActions";
 
 const initialState: LogState = {
   loading: false,
@@ -84,6 +91,20 @@ const logSlice = createSlice({
         state.success = true;
       })
       .addCase(deleteLog.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "Something went wrong";
+      })
+
+      // Improve log
+      .addCase(improveLog.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(improveLog.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(improveLog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Something went wrong";
       });

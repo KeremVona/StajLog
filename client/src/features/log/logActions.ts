@@ -150,3 +150,34 @@ export const deleteLog = createAsyncThunk<
     }
   }
 });
+
+// response, payload, reject
+export const improveLog = createAsyncThunk<
+  any,
+  EditLogThunkArgs,
+  { rejectValue: string }
+>("log/improveLog", async ({ data, logId }, { rejectWithValue }) => {
+  try {
+    const token = localStorage.getItem("token");
+    let parsedToken;
+    if (token) parsedToken = JSON.parse(token);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${parsedToken.jwtToken}`,
+      },
+    };
+    const response = await axios.post(
+      `${backendURL}/api/log/${logId}`,
+      data,
+      config,
+    );
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.data.message) {
+      return rejectWithValue(error.response.data.message);
+    } else {
+      return rejectWithValue(error.message);
+    }
+  }
+});
