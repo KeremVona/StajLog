@@ -9,6 +9,7 @@ import {
   editLog,
   getLogById,
   getLogs,
+  improveLog,
 } from "../features/log/logActions";
 import useFormData from "../hooks/useFormData";
 import { LogStatus } from "../interfaces/log/Log";
@@ -18,8 +19,11 @@ const LogDetail = () => {
     internshipId: 0,
     logDate: new Date().toISOString(),
     content: "",
+    improvedContent: "",
     status: LogStatus.DRAFT,
   });
+
+  const [showOriginal, setShowOriginal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,6 +50,7 @@ const LogDetail = () => {
       setFormData((prev: any) => ({
         ...prev,
         content: currentLog.content || "",
+        improvedContent: currentLog.improvedContent || "",
         logDate: currentLog.logDate || prev.logDate,
         status: currentLog.status || prev.status,
       }));
@@ -62,6 +67,18 @@ const LogDetail = () => {
     };
 
     dispatch(editLog({ logId: numberLogId, data: payload })).unwrap();
+  };
+
+  const handleImprove = async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    const payload = {
+      ...formData,
+      internshipId: numberId,
+      logDate: formData.logDate,
+    };
+
+    dispatch(improveLog({ logId: numberLogId, data: payload })).unwrap();
   };
 
   const handleDelete = () => {
@@ -147,8 +164,16 @@ const LogDetail = () => {
             {/* Writing Area */}
             <div className="flex-1 p-8">
               <textarea
-                value={formData.content}
-                name="content"
+                value={
+                  logInfo?.[0]?.isImproved && !showOriginal
+                    ? formData.improvedContent
+                    : formData.content
+                }
+                name={
+                  logInfo?.[0]?.isImproved && !showOriginal
+                    ? "improvedContent"
+                    : "content"
+                }
                 onChange={handleInputChange}
                 placeholder="What did you work on today? Don't worry about perfect grammar, the AI will help you polish it..."
                 className="w-full h-full min-h-[400px] resize-none border-none p-0 text-base leading-relaxed text-zinc-800 placeholder-zinc-400 focus:ring-0 bg-transparent outline-none"
@@ -174,19 +199,33 @@ const LogDetail = () => {
                 Write roughly, then improve it for the official document.
               </div>
 
-              <button
-                type="button"
-                className="inline-flex items-center rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:from-indigo-600 hover:to-violet-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-0.5"
-              >
-                <svg
-                  className="mr-2 h-4 w-4"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
+              <div className="flex items-center gap-4">
+                {/* Only show the toggle button if an improved version exists */}
+                {logInfo?.[0]?.isImproved && (
+                  <button
+                    type="button"
+                    onClick={() => setShowOriginal(!showOriginal)}
+                    className="text-sm font-medium text-zinc-600 hover:text-zinc-900 underline underline-offset-2 transition-colors"
+                  >
+                    {showOriginal ? "See Improved" : "See Original"}
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleImprove}
+                  className="inline-flex items-center rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:from-indigo-600 hover:to-violet-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 ease-in-out transform hover:-translate-y-0.5"
                 >
-                  <path d="M21 14.2V8.9L16.4 4.3H4C2.9 4.3 2 5.2 2 6.3V18.3C2 19.4 2.9 20.3 4 20.3H14.2V14.2H21ZM14 13V19L20 13H14Z" />
-                </svg>
-                Improve with AI
-              </button>
+                  <svg
+                    className="mr-2 h-4 w-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M21 14.2V8.9L16.4 4.3H4C2.9 4.3 2 5.2 2 6.3V18.3C2 19.4 2.9 20.3 4 20.3H14.2V14.2H21ZM14 13V19L20 13H14Z" />
+                  </svg>
+                  Improve with AI
+                </button>
+              </div>
             </div>
           </div>
 
