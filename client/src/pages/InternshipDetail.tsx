@@ -7,11 +7,14 @@ import {
 } from "../features/internship/internshipActions";
 import { Link, useParams } from "react-router-dom";
 import Logs from "../components/log/Logs";
+import { getLogs } from "../features/log/logActions";
 
 const InternshipDetail = () => {
   const { loading, error, internshipInfo } = useAppSelector(
     (state) => state.internship,
   );
+
+  const { logInfo } = useAppSelector((state) => state.log);
   const dispatch = useAppDispatch();
 
   const { id } = useParams<{ id: string }>();
@@ -20,6 +23,9 @@ const InternshipDetail = () => {
   useEffect(() => {
     if (internshipInfo.length === 0) {
       dispatch(getInternshipById({ internshipId: Number(id) }));
+    }
+    if (logInfo.length === 0) {
+      dispatch(getLogs()).unwrap();
     }
   }, [dispatch, internshipInfo.length]);
 
@@ -119,7 +125,7 @@ const InternshipDetail = () => {
                     Log Completion Requirement
                   </p>
                   <p className="text-2xl font-semibold text-zinc-900 mt-1">
-                    14{" "}
+                    {logInfo.length}{" "}
                     <span className="text-base text-zinc-500 font-normal">
                       / 30 Days
                     </span>
@@ -129,7 +135,7 @@ const InternshipDetail = () => {
                   <div className="h-2 w-full rounded-full bg-zinc-100 overflow-hidden">
                     <div
                       className="h-full bg-indigo-500 rounded-full"
-                      style={{ width: "46%" }}
+                      style={{ width: `${(logInfo.length / 30) * 100}%` }}
                     ></div>
                   </div>
                   <div className="flex justify-between text-xs text-zinc-500 mt-2">
