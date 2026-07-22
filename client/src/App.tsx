@@ -9,6 +9,7 @@ import InternshipDetail from "./pages/InternshipDetail";
 import MakeInternship from "./pages/MakeInternship";
 import MakeLog from "./pages/MakeLog";
 import LogDetail from "./pages/LogDetail";
+import GenerateLogPage from "./pages/GenerateLogPage";
 
 function App() {
   return (
@@ -44,6 +45,11 @@ function App() {
           <Route
             path="/internships/:id/make-log"
             element={<ProtectedRoute content={<MakeLog />} />}
+          />
+
+          <Route
+            path="/internships/:id/generate-log"
+            element={<ProtectedRoute content={<GenerateLogPage />} />}
           />
 
           <Route path="*" element={<Navigate to="/login" replace />} />
