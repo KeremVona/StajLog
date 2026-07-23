@@ -47,7 +47,7 @@ export const exportInternshipLogHandler: RequestHandler<
     );
 
     // 3. Generate initial DOCX buffer
-    const templatePath = path.join(__dirname, "../../templates/x.docx");
+    const templatePath = path.join(__dirname, "../../x.doc");
     const docxBuffer = DocxGeneratorService.generateDocx(templatePath, context);
 
     const baseFilename = `${internship.companyName.replace(/\s+/g, "_")}_Logs`;
