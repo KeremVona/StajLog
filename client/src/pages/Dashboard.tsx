@@ -1,6 +1,61 @@
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Sidebar from "../components/layout/Sidebar";
+import { getInternships } from "../features/internship/internshipActions";
+import { getLogs } from "../features/log/logActions";
+import { useParams, useNavigate } from "react-router";
+import type { LogData } from "../interfaces/log/Log";
 
 const Dashboard = () => {
+  const { internshipInfo, error, loading } = useAppSelector(
+    (state) => state.internship,
+  );
+
+  const { logInfo } = useAppSelector((state) => state.log);
+
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (internshipInfo.length === 0) {
+      dispatch(getInternships()).unwrap();
+    }
+    if (logInfo.length === 0) {
+      dispatch(getLogs()).unwrap();
+    }
+  }, [dispatch, internshipInfo.length]);
+
+  let logs: (LogData & { dayNumber: number })[] = [];
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const sortedLogs = [...logInfo].sort((a, b) => {
+    const timeDiff =
+      new Date(a.logDate).getTime() - new Date(b.logDate).getTime();
+
+    // If dates are exactly the same, fallback to sorting by ID
+    // so the order remains consistent even after updates
+    if (timeDiff === 0) {
+      return a.id - b.id;
+    }
+
+    return timeDiff;
+  });
+
+  if (sortedLogs) {
+    logs = sortedLogs.map((log, index) => ({
+      ...log,
+      dayNumber: index + 1,
+    }));
+  }
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!internshipInfo || internshipInfo.length === 0) {
+    return <div>No internship details found.</div>;
+  }
+
   return (
     <div className="flex h-screen bg-zinc-50 font-sans text-zinc-900">
       {/* Sidebar Navigation */}
@@ -20,7 +75,10 @@ const Dashboard = () => {
               </p>
             </div>
             <div className="flex gap-3">
-              <a href="/make-internship" className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm border border-zinc-200 hover:bg-zinc-50 transition-colors">
+              <a
+                href="/make-internship"
+                className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm border border-zinc-200 hover:bg-zinc-50 transition-colors"
+              >
                 Make New Internship
               </a>
               <button className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors">
@@ -44,9 +102,12 @@ const Dashboard = () => {
 
                 <div>
                   <h3 className="text-xl font-semibold text-zinc-900">
-                    Company name
+                    {internshipInfo[0].companyName}
                   </h3>
-                  <p className="text-sm text-zinc-500 mt-1">Role • Location </p>
+                  <p className="text-sm text-zinc-500 mt-1">
+                    {internshipInfo[0].companySector} •{" "}
+                    {internshipInfo[0].companyAddress}{" "}
+                  </p>
                 </div>
 
                 {/* Progress Bar Area */}
@@ -84,7 +145,7 @@ const Dashboard = () => {
                   <li className="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 transition-colors group cursor-pointer">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-zinc-900">
-                        Day 14 Log
+                        {logInfo[logInfo.length - 1].id}
                       </span>
                       <span className="text-xs text-zinc-500 mt-0.5">
                         Updated 2 hours ago
