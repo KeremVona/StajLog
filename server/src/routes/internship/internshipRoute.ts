@@ -1,3 +1,4 @@
+import { exportInternshipLogHandler } from "#/controllers/document/documentController.js";
 import {
   deleteInternshipHandler,
   editInternshipHandler,
@@ -15,5 +16,6 @@ router.get("/:id", authorize, getInternshipHandler);
 router.post("/", authorize, makeInternshipHandler);
 router.put("/:id", authorize, editInternshipHandler as any);
 router.delete("/:id", authorize, deleteInternshipHandler);
+router.post("/:id", authorize, exportInternshipLogHandler);
 
 export default router;

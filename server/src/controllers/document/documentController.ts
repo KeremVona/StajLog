@@ -1,10 +1,11 @@
 import { buildTemplateContext } from "#/utils/documentSanitizer.js";
 import { DocxGeneratorService } from "#/utils/docxGenerator.js";
+import { PdfConverterService } from "#/utils/pdfConverter.js";
 import { prisma } from "#/utils/prisma.js";
 import type { RequestHandler } from "express";
 import path from "path";
 
-export const exportInternshipDocxHandler: RequestHandler<
+export const exportInternshipLogHandler: RequestHandler<
   { id: string },
   any,
   any
@@ -17,15 +18,14 @@ export const exportInternshipDocxHandler: RequestHandler<
       res.status(401).send("Unauthorized");
       return;
     }
-    const useImprovedText = req.query.useImproved !== "false"; // Default to true
+    const format = (req.query.format as string)?.toLowerCase() || "docx";
+    const useImprovedText = req.query.useImproved !== "false";
 
-    // 1. Fetch complete relational dataset from database
+    // 1. Fetch complete relational dataset
     const internship = await prisma.internship.findUnique({
       where: { id: Number(id) },
       include: {
-        user: {
-          include: { university: true },
-        },
+        user: { include: { university: true } },
         logs: {
           where: { status: "COMPLETED" },
           orderBy: { logDate: "asc" },
@@ -34,10 +34,10 @@ export const exportInternshipDocxHandler: RequestHandler<
     });
 
     if (!internship) {
-      return res.status(404).json({ error: "Internship not found" });
+      return res.status(404).json({ error: "Internship record not found" });
     }
 
-    // 2. Prepare sanitized context payload
+    // 2. Build template context object
     const context = buildTemplateContext(
       internship.user,
       internship.user.university,
@@ -46,27 +46,38 @@ export const exportInternshipDocxHandler: RequestHandler<
       useImprovedText,
     );
 
-    // 3. Locate template file path
+    // 3. Generate initial DOCX buffer
     const templatePath = path.join(__dirname, "../../templates/x.docx");
-
-    // 4. Generate DOCX binary buffer
     const docxBuffer = DocxGeneratorService.generateDocx(templatePath, context);
 
-    // 5. Configure response headers for browser download
-    const filename = `${internship.companyName.replace(/\s+/g, "_")}_Logs.docx`;
+    const baseFilename = `${internship.companyName.replace(/\s+/g, "_")}_Logs`;
 
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    );
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="${encodeURIComponent(filename)}"`,
-    );
+    // 4. Branch logic based on target format
+    if (format === "pdf") {
+      const pdfBuffer = await PdfConverterService.convertDocxToPdf(docxBuffer);
 
-    return res.send(docxBuffer);
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${encodeURIComponent(baseFilename)}.pdf"`,
+      );
+      return res.send(pdfBuffer);
+    } else {
+      // Default: DOCX
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      );
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${encodeURIComponent(baseFilename)}.docx"`,
+      );
+      return res.send(docxBuffer);
+    }
   } catch (error) {
-    console.error("Docx generation error:", error);
-    return res.status(500).json({ error: "Failed to generate document" });
+    console.error("Export handler error:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to generate and export document" });
   }
 };

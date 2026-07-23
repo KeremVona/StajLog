@@ -117,9 +117,7 @@ export default function GenerateLogPage() {
                 name="template"
                 className="block w-full rounded-md border border-zinc-300 py-2 pl-3 pr-10 text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm bg-white"
               >
-                <option>
-                  Fatih Sultan Mehmet Vakıf Üni. Standard Log (.docx)
-                </option>
+                <option>University name Standard Log (.docx)</option>
                 <option>Generic Log Template (.docx)</option>
               </select>
             </div>
