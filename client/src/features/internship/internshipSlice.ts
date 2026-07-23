@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   deleteInternship,
   editInternship,
+  exportInternshipLog,
   getInternshipById,
   getInternships,
   makeInternship,
@@ -90,6 +91,20 @@ const internshipSlice = createSlice({
         state.success = true;
       })
       .addCase(deleteInternship.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "Something went wrong";
+      })
+
+      // Export internship log
+      .addCase(exportInternshipLog.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(exportInternshipLog.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(exportInternshipLog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Something went wrong";
       });
